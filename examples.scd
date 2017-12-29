@@ -1,6 +1,7 @@
 
 //access or create the project
-a = Cactus("~/Develop/SuperCollider/Cactus/testProject");
+a = Cactus("~/Develop/SuperCollider/Cactus/_develop/test");
+
 a.openProjectDir;
 a.loadBuffers; //this would clear the current buffers first
 a.buffers.at("test-1").play
