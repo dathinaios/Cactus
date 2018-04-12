@@ -24,6 +24,12 @@ Cactus { var <projectPath;
     ("\n  " ++ projectPath.basename ++ " has been initialised. \n").postln;
   }
 
+  runPlugin { arg name, args; var path;
+    path = projectPath ++ "/plugins/";
+    path = path ++ name ++ ".scd";
+    path.load.value(args);
+  }
+
   createDirs { var buffersPath, helpersPath, pluginPath, initPath, configPath;
 
     buffersPath = projectPath ++ "/buffers";
