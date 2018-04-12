@@ -24,10 +24,11 @@ Cactus { var <projectPath;
     ("\n  " ++ projectPath.basename ++ " has been initialised. \n").postln;
   }
 
-  createDirs { var buffersPath, helpersPath, initPath, configPath;
+  createDirs { var buffersPath, helpersPath, pluginPath, initPath, configPath;
 
     buffersPath = projectPath ++ "/buffers";
     helpersPath = projectPath ++ "/helpers";
+    pluginPath = projectPath ++ "/plugins";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
 
@@ -35,19 +36,23 @@ Cactus { var <projectPath;
     if ( File.exists(buffersPath ).not, {
       File.mkdir(buffersPath);
       ("created: " ++ buffersPath).postln;
-    },{".    Project Dir - Done".postln});
+    },{".     Project Dir - Done".postln});
     if ( File.exists(helpersPath ).not, {
       File.mkdir(helpersPath);
       ("created: " ++ helpersPath).postln;
-    },{"..   Helpers Dir - Done".postln});
+    },{"..    Helpers Dir - Done".postln});
+    if ( File.exists(pluginPath ).not, {
+      File.mkdir(pluginPath);
+      ("created: " ++ pluginPath).postln;
+    },{"...   Plugin Dir - Done".postln});
     if ( File.exists(initPath ).not, {
       File.mkdir(initPath);
       ("created: " ++ initPath).postln;
-    },{"...  Init Dir - Done".postln});
+    },{"....  Init Dir - Done".postln});
     if ( File.exists(configPath).not, {
       File.new(configPath, "w").write("");
       ("created: " ++ configPath).postln;
-    },{".... Configuration File - Done".postln});
+    },{"..... Configuration File - Done".postln});
   }
 
   openProjectDir {
