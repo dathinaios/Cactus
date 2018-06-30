@@ -122,6 +122,14 @@ Cactus { var <projectPath;
 
   clearBuffers {
     buffers.do{arg i; i.free;};
+    buffers.clear;
+  }
+
+  restart {
+    this.loadBuffers;
+    this.displayLoadInfo;
+    this.runConfig;
+    this.runUserInit;
   }
 
 }
