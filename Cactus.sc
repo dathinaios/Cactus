@@ -81,24 +81,26 @@ Cactus { var <projectPath;
     },{"....  Init Dir - Done".postln});
     if ( File.exists(configPath).not, {
       File.new(configPath, "w").write("");
-      ("created: " ++ configPath).postln;
-    },{"..... Configuration File - Done".postln});
+      ("created: " ++ configPath ++ "\n").postln;
+    },{"..... Configuration File - Done\n".postln});
   }
 
   openProjectDir {
     projectPath.openOS;
   }
 
-  reloadBuffers { var bufferArray;
+  loadBuffers { var bufferArray;
     this.clearBuffers;
     bufferArray = SoundFile.collectIntoBuffers(projectPath ++ "/buffers/*/*");
     bufferArray.do{arg i; var folder, soundFile;
       folder = i.path.dirname.split.last;
       soundFile = i.path.basename.splitext[0];
-      if(buffers.at(folder).isNil, {buffers.put(folder, List.new)});
+      if(buffers.at(folder).isNil, {
+        buffers.put(folder, List.new);
+        ("Buffer Group: " ++ folder  ++ " -> ready").postln;
+      });
       buffers.at(folder).add(i);
       buffers.put(folder ++ "/" ++ soundFile, i);
-      ("Buffer created: " ++ soundFile).postln;
     };
     // ^buffers;
   }
