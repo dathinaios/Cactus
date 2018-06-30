@@ -11,6 +11,7 @@ Cactus { var <projectPath;
     buffers = Dictionary.new;
     this.displayWelcome;
     this.createDirs;
+    this.runUserInit;
     this.loadBuffers;
     this.displayLoadInfo;
   }
@@ -22,6 +23,14 @@ Cactus { var <projectPath;
 
   displayLoadInfo {
     ("\n  " ++ projectPath.basename ++ " has been initialised. \n").postln;
+  }
+
+  runUserInit { var path;
+    path = projectPath ++ "/init/";
+    path = PathName(path);
+    path.files.do{ arg i;
+      i.fullPath.load.value;
+    };
   }
 
   runPlugin { arg name, args; var path;
