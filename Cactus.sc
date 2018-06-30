@@ -89,7 +89,7 @@ Cactus { var <projectPath;
       folder = i.path.dirname.split.last;
       soundFile = i.path.basename.splitext[0];
       ("Buffer created: " ++ soundFile).postln;
-      buffers.put(folder ++ "-" ++ soundFile, i);
+      buffers.put(folder ++ "/" ++ soundFile, i);
     };
     // ^buffers;
   }
