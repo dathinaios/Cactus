@@ -30,6 +30,14 @@ Cactus { var <projectPath;
     path.load.value(args);
   }
 
+  listPlugins { var path;
+    path = projectPath ++ "/plugins/";
+    path = PathName(path);
+    "\n".postln;
+    path.files.do{ arg i; i.fileNameWithoutExtension.postln};
+    "\n".postln;
+  }
+
   createDirs { var buffersPath, helpersPath, pluginPath, initPath, configPath;
 
     buffersPath = projectPath ++ "/buffers";
