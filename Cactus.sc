@@ -88,8 +88,10 @@ Cactus { var <projectPath;
     bufferArray.do{arg i; var folder, soundFile;
       folder = i.path.dirname.split.last;
       soundFile = i.path.basename.splitext[0];
-      ("Buffer created: " ++ soundFile).postln;
+      if(buffers.at(folder).isNil, {buffers.put(folder, List.new)});
+      buffers.at(folder).add(i);
       buffers.put(folder ++ "/" ++ soundFile, i);
+      ("Buffer created: " ++ soundFile).postln;
     };
     // ^buffers;
   }
