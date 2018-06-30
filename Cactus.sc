@@ -7,14 +7,29 @@ Cactus { var <projectPath;
   }
 
   init {
-    projectPath = projectPath.standardizePath;
     buffers = Dictionary.new;
+    this.initProjectPath;
+  }
+
+  initWithPath {
     this.displayWelcome;
     this.createDirs;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runConfig;
     this.runUserInit;
+  }
+
+  initProjectPath {
+    if(projectPath.isNil,
+      {
+        FileDialog(
+          okFunc: { arg path; projectPath = path; this.initWithPath },
+          fileMode: 2,
+          stripResult: true);
+      },
+      { projectPath = projectPath.standardizePath; this.initWithPath }
+    );
   }
 
   displayWelcome {
