@@ -11,9 +11,10 @@ Cactus { var <projectPath;
     buffers = Dictionary.new;
     this.displayWelcome;
     this.createDirs;
-    this.runUserInit;
     this.loadBuffers;
     this.displayLoadInfo;
+    this.runConfig;
+    this.runUserInit;
   }
 
   displayWelcome {
@@ -23,6 +24,12 @@ Cactus { var <projectPath;
 
   displayLoadInfo {
     ("\n  " ++ projectPath.basename ++ " has been initialised. \n").postln;
+  }
+
+  runConfig { var path;
+    "Running \'config.scd\'".postln;
+    path = projectPath ++ "/config.scd";
+    path.load.value;
   }
 
   runUserInit { var path;
@@ -82,7 +89,7 @@ Cactus { var <projectPath;
     projectPath.openOS;
   }
 
-  loadBuffers { var bufferArray;
+  reloadBuffers { var bufferArray;
     this.clearBuffers;
     bufferArray = SoundFile.collectIntoBuffers(projectPath ++ "/buffers/*/*");
     bufferArray.do{arg i; var folder, soundFile;
