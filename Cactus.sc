@@ -55,25 +55,25 @@ Cactus { var <projectPath;
     };
   }
 
-  runPlugin { arg name, args; var path;
-    path = projectPath ++ "/plugins/";
+  runModule { arg name, args; var path;
+    path = projectPath ++ "/modules/";
     path = path ++ name ++ ".scd";
     path.load.value(args);
   }
 
-  listPlugins { var path;
-    path = projectPath ++ "/plugins/";
+  listModules { var path;
+    path = projectPath ++ "/modules/";
     path = PathName(path);
     "\n".postln;
     path.files.do{ arg i; i.fileNameWithoutExtension.postln};
     "\n".postln;
   }
 
-  createDirs { var buffersPath, helpersPath, pluginPath, initPath, configPath;
+  createDirs { var buffersPath, helpersPath, modulePath, initPath, configPath;
 
     buffersPath = projectPath ++ "/buffers";
     helpersPath = projectPath ++ "/helpers";
-    pluginPath = projectPath ++ "/plugins";
+    modulePath = projectPath ++ "/modules";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
 
@@ -86,10 +86,10 @@ Cactus { var <projectPath;
       File.mkdir(helpersPath);
       ("created: " ++ helpersPath).postln;
     },{"..    Helpers Dir - Done".postln});
-    if ( File.exists(pluginPath ).not, {
-      File.mkdir(pluginPath);
-      ("created: " ++ pluginPath).postln;
-    },{"...   Plugin Dir - Done".postln});
+    if ( File.exists(modulePath ).not, {
+      File.mkdir(modulePath);
+      ("created: " ++ modulePath).postln;
+    },{"...   Modules Dir - Done".postln});
     if ( File.exists(initPath ).not, {
       File.mkdir(initPath);
       ("created: " ++ initPath).postln;
