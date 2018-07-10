@@ -69,10 +69,9 @@ Cactus { var <projectPath;
     "\n".postln;
   }
 
-  createDirs { var buffersPath, helpersPath, modulePath, initPath, configPath;
+  createDirs { var buffersPath, modulePath, initPath, configPath;
 
     buffersPath = projectPath ++ "/buffers";
-    helpersPath = projectPath ++ "/helpers";
     modulePath = projectPath ++ "/modules";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
@@ -81,23 +80,19 @@ Cactus { var <projectPath;
     if ( File.exists(buffersPath ).not, {
       File.mkdir(buffersPath);
       ("created: " ++ buffersPath).postln;
-    },{".     Project Dir - Done".postln});
-    if ( File.exists(helpersPath ).not, {
-      File.mkdir(helpersPath);
-      ("created: " ++ helpersPath).postln;
-    },{"..    Helpers Dir - Done".postln});
+    },{".    Project Dir - Done".postln});
     if ( File.exists(modulePath ).not, {
       File.mkdir(modulePath);
       ("created: " ++ modulePath).postln;
-    },{"...   Modules Dir - Done".postln});
+    },{"..   Modules Dir - Done".postln});
     if ( File.exists(initPath ).not, {
       File.mkdir(initPath);
       ("created: " ++ initPath).postln;
-    },{"....  Init Dir - Done".postln});
+    },{"...  Init Dir - Done".postln});
     if ( File.exists(configPath).not, {
       File.new(configPath, "w").write("");
       ("created: " ++ configPath ++ "\n").postln;
-    },{"..... Configuration File - Done\n".postln});
+    },{".... Configuration File - Done\n".postln});
   }
 
   openProjectDir {
