@@ -24,7 +24,11 @@ Cactus { var <projectPath;
     if(projectPath.isNil,
       {
         FileDialog(
-          okFunc: { arg path; projectPath = path; this.initWithPath },
+          okFunc: { arg path;
+            projectPath = path;
+            this.initWithPath;
+            this.openProjectDir;
+          },
           fileMode: 2,
           stripResult: true);
       },
