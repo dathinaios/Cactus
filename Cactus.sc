@@ -1,14 +1,20 @@
 
-Cactus { var <projectPath;
-  var <buffers;
+Cactus { var <projectName, <projectPath;
+         var <buffers;
+         classvar <at;
 
-  *new { arg projectPath;
-    ^super.newCopyArgs(projectPath).init;
+  *new { arg projectName, projectPath;
+    ^super.newCopyArgs(projectName, projectPath).init;
+  }
+
+  *initClass {
+    at = Dictionary.new;
   }
 
   init {
     buffers = Dictionary.new;
     this.initProjectPath;
+    at[projectName] = this;
   }
 
   initWithPath {
@@ -127,7 +133,6 @@ Cactus { var <projectPath;
   restart {
     this.loadBuffers;
     this.displayLoadInfo;
-    this.runConfig;
     this.runUserInit;
   }
 
