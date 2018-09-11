@@ -12,9 +12,9 @@ Cactus { var <projectName, <projectPath;
   }
 
   init {
+    at[projectName] = this;
     buffers = Dictionary.new;
     this.initProjectPath;
-    at[projectName] = this;
   }
 
   initWithPath {
