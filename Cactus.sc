@@ -117,10 +117,11 @@ Cactus { var <projectName, <projectPath;
       soundFile = i.path.basename.splitext[0];
       if(buffers.at(folder).isNil, {
         buffers.put(folder, List.new);
-        ("Buffer Group: " ++ folder  ++ " -> ready").postln;
+        ("Buffer group " ++ folder  ++ " contains:").postln;
       });
       buffers.at(folder).add(i);
       buffers.put(folder ++ "/" ++ soundFile, i);
+      ("  ->  " ++ soundFile).postln;
     };
     // ^buffers;
   }
