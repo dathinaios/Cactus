@@ -78,7 +78,7 @@ Cactus { var <projectPath;
 
   runModule { arg name, args; var path;
     path = projectPath ++ "/modules/";
-    path = path ++ name ++ ".scd";
+    path = path ++ name ++ "/run.scd";
     path.load.value(args);
   }
 
@@ -86,8 +86,18 @@ Cactus { var <projectPath;
     path = projectPath ++ "/modules/";
     path = PathName(path);
     "\n".postln;
-    path.files.do{ arg i; i.fileNameWithoutExtension.postln};
+    path.folders.do{ arg i; i.folderName.postln};
     "\n".postln;
+  }
+
+  runTemplate { arg name;
+    // TODO decide on the template folder design and execution
+    // this.templateManager
+    // .createFileFromTemplate(
+    //   templateName: "template_test",
+    //   targetDir: "~/Desktop",
+    //   options: ('_arg1_': "dionysis", '_arg2_': "projectName")
+    // );
   }
 
   createDirs { var buffersPath, modulePath, initPath, configPath, startFilePath;
@@ -164,5 +174,38 @@ Cactus { var <projectPath;
     "Cactus.at[\\" ++ projectName ++ "].restart;\n"++
     "Cactus.at[\\" ++ projectName ++ "].listModules;"
   }
+
+  listModulesGUI { var path; var gui, infoGUI, infoWin;
+    path = projectPath ++ "/modules/";
+    path = PathName(path);
+
+    gui = EZListView.new(nil,200@200, "Modules");
+    gui.font = Font("Monaco", 11);
+    infoWin = Window(
+      "Info",
+      Rect(
+        gui.window.bounds.left+gui.window.bounds.width,
+        gui.window.bounds.top-200, 400, 400),
+      scroll: true
+    ).front;
+    infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
+    infoGUI.font = Font("Monaco", 11);
+
+    path.folders.do{
+      arg module; var name, info;
+      name = module.folderName;
+      File.use(
+        path.fullPath ++ "/" ++ module.folderName ++ "/" ++ "readme.txt", "r",
+        {
+          arg f; info = f.readAllString;
+          gui.addItem(name, { infoGUI.string = info });
+        }
+      );
+    };
+
+    gui.valueAction = 0;
+
+  }
+
 
 }
