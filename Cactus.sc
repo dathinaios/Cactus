@@ -1,6 +1,6 @@
 
 Cactus { var <projectPath;
-         var <buffers;
+         var <buffers, <projectName;
          classvar <at;
 
   *new { arg projectPath;
@@ -11,14 +11,13 @@ Cactus { var <projectPath;
     at = Dictionary.new;
   }
 
-  init { var projectName;
-    projectName = projectPath.basename.asSymbol;
-    at[projectName] = this;
+  init {
     buffers = Dictionary.new;
     this.initProjectPath;
   }
 
   initWithPath {
+    this.initProjectName;
     this.displayWelcome;
     this.createDirs;
     this.loadBuffers;
@@ -26,6 +25,12 @@ Cactus { var <projectPath;
     this.runConfig;
     this.runUserInit;
   }
+
+  initProjectName {
+    projectName = projectPath.basename.asSymbol;
+    at[projectName] = this;
+  }
+
 
   initProjectPath {
     if(projectPath.isNil,
@@ -80,30 +85,40 @@ Cactus { var <projectPath;
     "\n".postln;
   }
 
-  createDirs { var buffersPath, modulePath, initPath, configPath;
+  createDirs { var buffersPath, modulePath, initPath, configPath, startFilePath;
 
     buffersPath = projectPath ++ "/buffers";
     modulePath = projectPath ++ "/modules";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
+    startFilePath = projectPath   ++ "/start.scd";
 
     File.mkdir(projectPath);
+
     if ( File.exists(buffersPath ).not, {
       File.mkdir(buffersPath);
       ("created: " ++ buffersPath).postln;
-    },{".    Project Dir - Done".postln});
+    },{".     Project Dir - Done".postln});
+
     if ( File.exists(modulePath ).not, {
       File.mkdir(modulePath);
       ("created: " ++ modulePath).postln;
-    },{"..   Modules Dir - Done".postln});
+    },{"..    Modules Dir - Done".postln});
+
     if ( File.exists(initPath ).not, {
       File.mkdir(initPath);
       ("created: " ++ initPath).postln;
-    },{"...  Init Dir - Done".postln});
+    },{"...   Init Dir - Done".postln});
+
     if ( File.exists(configPath).not, {
       File.new(configPath, "w").write("");
       ("created: " ++ configPath ++ "\n").postln;
-    },{".... Configuration File - Done\n".postln});
+    },{"....  Configuration File - Done".postln});
+
+    if ( File.exists(startFilePath).not, {
+      File.new(startFilePath, "w").write(this.startFileText).close;
+      ("created: " ++ startFilePath ++ "\n").postln;
+    },{"..... StartFile - Done\n".postln});
   }
 
   openProjectDir {
@@ -136,6 +151,13 @@ Cactus { var <projectPath;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
+  }
+
+  startFileText {
+    ^"Cactus(\"" ++ projectPath ++ "\");\n\n"++
+    "Cactus.at[\\" ++ projectName ++ "].openProjectDir;\n"++
+    "Cactus.at[\\" ++ projectName ++ "].restart;\n"++
+    "Cactus.at[\\" ++ projectName ++ "].listModules;"
   }
 
 }
