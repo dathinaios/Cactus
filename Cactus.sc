@@ -1,17 +1,18 @@
 
-Cactus { var <projectName, <projectPath;
+Cactus { var <projectPath;
          var <buffers;
          classvar <at;
 
-  *new { arg projectName, projectPath;
-    ^super.newCopyArgs(projectName, projectPath).init;
+  *new { arg projectPath;
+    ^super.newCopyArgs(projectPath).init;
   }
 
   *initClass {
     at = Dictionary.new;
   }
 
-  init {
+  init { var projectName;
+    projectName = projectPath.basename.asSymbol;
     at[projectName] = this;
     buffers = Dictionary.new;
     this.initProjectPath;
