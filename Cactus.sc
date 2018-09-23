@@ -1,6 +1,6 @@
 
 Cactus { var <projectPath;
-         var <buffers, <projectName;
+         var <buffers, <projectName, <templateManager;
          classvar <at;
 
   *new { arg projectPath;
@@ -14,6 +14,7 @@ Cactus { var <projectPath;
   init {
     buffers = Dictionary.new;
     this.initProjectPath;
+    this.initTemplateManager;
   }
 
   initWithPath {
@@ -46,6 +47,10 @@ Cactus { var <projectPath;
       },
       { projectPath = projectPath.standardizePath; this.initWithPath }
     );
+  }
+
+  initTemplateManager {
+    templateManager = CactusTemplateManager(projectPath);
   }
 
   displayWelcome {
