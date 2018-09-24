@@ -6,6 +6,7 @@ CactusTemplateManager { var <templatesDir;
   }
 
   init {
+    templatesDir ?? {templatesDir = File.getcwd};
     templatesDir = templatesDir ++ "/templates";
   }
 
@@ -20,19 +21,56 @@ CactusTemplateManager { var <templatesDir;
     });
   }
 
-  createFileFromTemplate {
-    arg templateName, targetDir, options;
+  createFromTemplateFile {
+    arg sourcePath, targetDir, options;
     var targetFilePath, generatedString;
 
-    targetFilePath = targetDir ++ "/" ++ templateName ++ ".scd";
+    targetFilePath = targetDir ++ "/" ++ sourcePath.fileName;
     generatedString = this.argFormatFile(
-      path: templatesDir ++ "/" ++ templateName++ ".scd",
+      path: sourcePath.fullPath,
       options: options
     );
     if ( File.exists(targetFilePath).not, {
       File.new(targetFilePath.standardizePath, "w").write(generatedString).close;
-      ("File" + targetFilePath + "created from template" + templateName).postln;
-    },{"File at" + targetDir + "already exists!".postln});
+      ("File" + targetFilePath.basename + "created").postln;
+    },{
+      File.copy(
+        targetFilePath.standardizePath,
+        targetFilePath.standardizePath ++ ".bkp"++(120000.rand)
+      );
+      File.new(targetFilePath.standardizePath, "w").write(generatedString).close;
+      ("A file named" + targetFilePath.basename + "was already there!").postln;
+      ("Renamed it to" + targetFilePath.basename ++ ".bkp.").postln;
+    });
+  }
+
+  runTemplate { arg templateName, options = (); var path;
+    path = PathName.new(templatesDir++"/"++ templateName);
+    this.copyTemplateBaseFiles(path, options);
+    this.copyTemplateSubFolderFiles(path, options);
+  }
+
+  copyTemplateBaseFiles { arg path, options;
+    path.files.do{ arg file;
+      this.createFromTemplateFile(
+        sourcePath: file,
+        targetDir: options.targetDir,
+        options: options
+      );
+    };
+  }
+
+  copyTemplateSubFolderFiles { arg path, options;
+    path.folders.do{ arg folder;
+      folder.files.do{ arg file;
+        this.createFromTemplateFile(
+          sourcePath: file,
+          targetDir: options.targetDir +/+ file.folderName,
+          options: options
+        );
+      };
+    };
+    
   }
 
 }
