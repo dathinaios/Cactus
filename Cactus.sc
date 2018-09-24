@@ -25,13 +25,13 @@ Cactus { var <projectPath;
     this.displayLoadInfo;
     this.runConfig;
     this.runUserInit;
+    this.runModuleInits;
   }
 
   initProjectName {
     projectName = projectPath.basename.asSymbol;
     at[projectName] = this;
   }
-
 
   initProjectPath {
     if(projectPath.isNil,
@@ -74,6 +74,17 @@ Cactus { var <projectPath;
     path.files.do{ arg i;
       i.fullPath.load.value;
     };
+  }
+
+  runModuleInits { var path;
+    path = projectPath ++ "/modules/";
+    path = PathName(path);
+    path.folders.do({ arg folder; var initPath;
+      initPath = PathName(folder.fullPath++"/init");
+      initPath.files.do{ arg i;
+        i.fullPath.load.value;
+      };
+    });
   }
 
   runModule { arg name, args; var path;
