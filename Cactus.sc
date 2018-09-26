@@ -50,7 +50,7 @@ Cactus { var <projectPath;
   }
 
   initTemplateManager {
-    templateManager = CactusTemplateManager.new;
+    templateManager = CactusTemplateManager(projectPath);
   }
 
   displayWelcome {
@@ -101,14 +101,13 @@ Cactus { var <projectPath;
     "\n".postln;
   }
 
-  runTemplate { arg name;
-    // TODO decide on the template folder design and execution
-    // this.templateManager
-    // .createFileFromTemplate(
-    //   templateName: "template_test",
-    //   targetDir: "~/Desktop",
-    //   options: ('_arg1_': "dionysis", '_arg2_': "projectName")
-    // );
+  runTemplate { arg templateName, options = ();
+    options.projectName = "\\" ++ projectName;
+    options.projectPath = "\"" ++ projectPath ++ "\"";
+    options.targetDir = projectPath;
+    this.templateManager.runTemplate(
+      templateName, options
+    );
   }
 
   createDirs { var buffersPath, modulePath, initPath, configPath, startFilePath;
