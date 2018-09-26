@@ -173,8 +173,8 @@ Cactus { var <projectPath;
       arg folder; var newBufs;
       newBufs = SoundFile.collectIntoBuffers(folder.fullPath ++ "/buffers/*/*");
       bufferArray = bufferArray.addAll(newBufs);
-      ^bufferArray;
     };
+    ^bufferArray;
   }
 
   clearBuffers {
