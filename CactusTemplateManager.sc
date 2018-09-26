@@ -50,22 +50,28 @@ CactusTemplateManager {
 
   copyTemplateBaseFiles { arg path, options;
     path.files.do{ arg file;
-      this.createFromTemplateFile(
-        sourcePath: file,
-        targetDir: options.targetDir,
-        options: options
-      );
+      if(file.extension == "scd")
+      {
+        this.createFromTemplateFile(
+          sourcePath: file,
+          targetDir: options.targetDir,
+          options: options
+        );
+      }
     };
   }
 
   copyTemplateSubFolderFiles { arg path, options;
     path.folders.do{ arg folder;
       folder.files.do{ arg file;
-        this.createFromTemplateFile(
-          sourcePath: file,
-          targetDir: options.targetDir +/+ file.folderName,
-          options: options
-        );
+      if(file.extension == "scd")
+        {
+          this.createFromTemplateFile(
+            sourcePath: file,
+            targetDir: options.targetDir +/+ file.folderName,
+            options: options
+          );
+        }
       };
     };
     

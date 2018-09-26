@@ -110,13 +110,12 @@ Cactus { var <projectPath;
     );
   }
 
-  createDirs { var buffersPath, modulePath, initPath, configPath, startFilePath;
+  createDirs { var buffersPath, modulePath, initPath, configPath;
 
     buffersPath = projectPath ++ "/buffers";
     modulePath = projectPath ++ "/modules";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
-    startFilePath = projectPath   ++ "/start.scd";
 
     File.mkdir(projectPath);
 
@@ -140,10 +139,6 @@ Cactus { var <projectPath;
       ("created: " ++ configPath ++ "\n").postln;
     },{"....  Configuration File - Done".postln});
 
-    if ( File.exists(startFilePath).not, {
-      File.new(startFilePath, "w").write(this.startFileText).close;
-      ("created: " ++ startFilePath ++ "\n").postln;
-    },{"..... StartFile - Done\n".postln});
   }
 
   openProjectDir {
@@ -164,7 +159,6 @@ Cactus { var <projectPath;
       buffers.put(folder ++ "/" ++ soundFile, i);
       ("  ->  " ++ soundFile).postln;
     };
-    // ^buffers;
   }
 
   clearBuffers {
@@ -176,13 +170,6 @@ Cactus { var <projectPath;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
-  }
-
-  startFileText {
-    ^"Cactus(\"" ++ projectPath ++ "\");\n\n"++
-    "Cactus.at[\\" ++ projectName ++ "].openProjectDir;\n"++
-    "Cactus.at[\\" ++ projectName ++ "].restart;\n"++
-    "Cactus.at[\\" ++ projectName ++ "].listModules;"
   }
 
   listModulesGUI { var path; var gui, infoGUI, infoWin;
