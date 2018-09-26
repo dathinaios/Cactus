@@ -109,6 +109,10 @@ Cactus { var <projectPath;
     this.templateManager.runTemplate(
       templateName, options
     );
+    Routine({
+      1.wait;
+      this.restart;
+    }).play;
   }
 
   createDirs { var buffersPath, modulePath, initPath, configPath;
