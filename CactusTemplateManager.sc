@@ -46,6 +46,7 @@ CactusTemplateManager {
     path = PathName.new(File.getcwd++"/templates/"++ templateName);
     this.copyTemplateBaseFiles(path, options);
     this.copyTemplateSubFolderFiles(path, options);
+    this.copyModules(path, options);
   }
 
   copyTemplateBaseFiles { arg path, options;
@@ -64,7 +65,7 @@ CactusTemplateManager {
   copyTemplateSubFolderFiles { arg path, options;
     path.folders.do{ arg folder;
       folder.files.do{ arg file;
-      if(file.extension != "txt")
+        if(file.extension != "txt")
         {
           this.createFromTemplateFile(
             sourcePath: file,
@@ -74,7 +75,22 @@ CactusTemplateManager {
         }
       };
     };
-    
+  }
+
+  copyModules { arg path, options;
+    path = path +/+ "modules";
+    path.folders.do{ arg folder; var sourceDir, targetDir;
+      sourceDir = folder.fullPath;
+      targetDir = options.targetDir ++ "/modules/" ++ folder.folderName;
+      ("cp -r" + sourceDir + targetDir).unixCmd({
+        arg code;
+        if(code == 0, {
+          ("succesfully copied module" + sourceDir.basename).postln;
+        },{
+          ("Could not copy module" + sourceDir.basename).postln;
+        });
+      }, false);
+    };
   }
 
 }
