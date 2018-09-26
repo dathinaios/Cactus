@@ -38,7 +38,7 @@ CactusTemplateManager {
       );
       File.new(targetFilePath.standardizePath, "w").write(generatedString).close;
       ("A file named" + targetFilePath.basename + "was already there!").postln;
-      ("Renamed it to" + targetFilePath.basename ++ ".bkp.").postln;
+      ("Renamed it to" + targetFilePath.basename ++ ".bkp").postln;
     });
   }
 
@@ -50,7 +50,7 @@ CactusTemplateManager {
 
   copyTemplateBaseFiles { arg path, options;
     path.files.do{ arg file;
-      if(file.extension == "scd")
+      if(file.extension != "txt")
       {
         this.createFromTemplateFile(
           sourcePath: file,
@@ -64,7 +64,7 @@ CactusTemplateManager {
   copyTemplateSubFolderFiles { arg path, options;
     path.folders.do{ arg folder;
       folder.files.do{ arg file;
-      if(file.extension == "scd")
+      if(file.extension != "txt")
         {
           this.createFromTemplateFile(
             sourcePath: file,
