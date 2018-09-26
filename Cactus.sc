@@ -31,6 +31,7 @@ Cactus { var <projectPath;
   initProjectName {
     projectName = projectPath.basename.asSymbol;
     at[projectName] = this;
+    at[\instance] = this;
   }
 
   initProjectPath {
