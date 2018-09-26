@@ -1,11 +1,12 @@
 
-CactusTemplateManager {
+CactusTemplateManager { var <cactusDir;
 
   *new {
     ^super.newCopyArgs.init;
   }
 
   init {
+    cactusDir = Cactus.filenameSymbol.asString.dirname;
   }
 
   argFormatFile { arg path, options;
@@ -43,7 +44,7 @@ CactusTemplateManager {
   }
 
   runTemplate { arg templateName, options = (); var path;
-    path = PathName.new(File.getcwd++"/templates/"++ templateName);
+    path = PathName.new(cactusDir++"/templates/"++ templateName);
     this.copyTemplateBaseFiles(path, options);
     this.copyTemplateSubFolderFiles(path, options);
     this.copyModules(path, options);

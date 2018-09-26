@@ -10,7 +10,7 @@ Cactus.at[projectName].restart;
 Cactus.at[projectName].listModulesGUI;
 
 // an example module is included
-Cactus.at[projectName].runModule(\example).value("testing 1", "and 2");
+Cactus.at[projectName].runModule(\example_module).value("testing 1", "and 2");
 
 // Any folder with sound files you place in the buffers folder becomes available
 // with the following syntax:

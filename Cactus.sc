@@ -51,7 +51,7 @@ Cactus { var <projectPath;
   }
 
   initTemplateManager {
-    templateManager = CactusTemplateManager(projectPath);
+    templateManager = CactusTemplateManager.new;
   }
 
   displayWelcome {
