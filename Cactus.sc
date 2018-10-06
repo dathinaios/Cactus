@@ -122,28 +122,27 @@ Cactus { var <projectPath;
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
 
-    File.mkdir(projectPath);
+    this.checkAndCreateDir(projectPath, "Project");
+    this.checkAndCreateDir(buffersPath, "Buffers");
+    this.checkAndCreateDir(modulePath, "Modules");
+    this.checkAndCreateDir(initPath, "Init");
+    this.checkAndCreateFile(configPath, "Configuration");
+    this.printNewLine;
 
-    if ( File.exists(buffersPath ).not, {
-      File.mkdir(buffersPath);
-      ("created: " ++ buffersPath).postln;
-    },{".     Project Dir - Done".postln});
+  }
 
-    if ( File.exists(modulePath ).not, {
-      File.mkdir(modulePath);
-      ("created: " ++ modulePath).postln;
-    },{"..    Modules Dir - Done".postln});
+  checkAndCreateDir { arg path, name;
+    if ( File.exists(path).not, {
+      File.mkdir(path);
+      ("created: " ++ path).postln;
+    },{( "  " ++ name ++ " Dir - Done" ).postln});
+  }
 
-    if ( File.exists(initPath ).not, {
-      File.mkdir(initPath);
-      ("created: " ++ initPath).postln;
-    },{"...   Init Dir - Done".postln});
-
-    if ( File.exists(configPath).not, {
-      File.new(configPath, "w").write("");
-      ("created: " ++ configPath ++ "\n").postln;
-    },{"....  Configuration File - Done".postln});
-
+  checkAndCreateFile { arg path, name;
+    if ( File.exists(path).not, {
+      File.new(path, "w").write("");
+      ("created: " ++ path ++ "\n").postln;
+    },{( "  " ++ name ++ " File - Done" ).postln});
   }
 
   openProjectDir {
@@ -218,6 +217,10 @@ Cactus { var <projectPath;
 
     gui.valueAction = 0;
 
+  }
+
+  printNewLine {
+   "\n".postln; 
   }
 
 
