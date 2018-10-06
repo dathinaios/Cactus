@@ -97,9 +97,9 @@ Cactus { var <projectPath;
   listModules { var path;
     path = projectPath ++ "/modules/";
     path = PathName(path);
-    "\n".postln;
+    this.printNewLine;
     path.folders.do{ arg i; i.folderName.postln};
-    "\n".postln;
+    this.printNewLine;
   }
 
   runTemplate { arg templateName, options = ();
