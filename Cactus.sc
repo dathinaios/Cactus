@@ -153,18 +153,25 @@ Cactus { var <projectPath;
     this.clearBuffers;
     bufferArray = SoundFile.collectIntoBuffers(projectPath ++ "/buffers/*/*");
     bufferArray = this.gatherBuffersFromModules(bufferArray);
-
-    bufferArray.do{arg i; var folder, soundFile;
-      folder = i.path.dirname.split.last;
-      soundFile = i.path.basename.splitext[0];
-      if(buffers.at(folder).isNil, {
-        buffers.put(folder, List.new);
-        ("Buffer group " ++ folder  ++ " contains:").postln;
-      });
-      buffers.at(folder).add(i);
-      buffers.put(folder ++ "/" ++ soundFile, i);
-      ("  ->  " ++ soundFile).postln;
+    bufferArray.do{arg soundFile; var folderName, soundFileName;
+      folderName = this.getFolderNameFromString(soundFile.path);
+      soundFileName = this.getFileNameWithoutExtension(soundFile.path);
+      this.storeBuffersAsCollection(folderName, soundFile);
+      this.storeBufferByName(soundFile, folderName, soundFileName);
     };
+  }
+
+  storeBuffersAsCollection { arg folderName, soundFile;
+      if(buffers.at(folderName).isNil, {
+        buffers.put(folderName, List.new);
+        ("Buffer group " ++ folderName  ++ " contains:").postln;
+      });
+      buffers.at(folderName).add(soundFile);
+  }
+
+  storeBufferByName{ arg soundFile, folderName, soundFileName;
+      buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
+      ("  ->  " ++ soundFileName).postln;
   }
 
   gatherBuffersFromModules { arg bufferArray;
@@ -219,9 +226,18 @@ Cactus { var <projectPath;
 
   }
 
+  //helper methods
+
   printNewLine {
    "\n".postln; 
   }
 
+  getFolderNameFromString { arg path;
+    ^path.dirname.split.last;
+  }
+
+  getFileNameWithoutExtension { arg path;
+    ^path.basename.splitext[0];
+  }
 
 }
