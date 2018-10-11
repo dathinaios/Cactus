@@ -1,6 +1,7 @@
 
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager;
+         var <buffersPath, <modulesPath, <initPath, <configPath;
          classvar <at;
 
   *new { arg projectPath;
@@ -13,8 +14,17 @@ Cactus { var <projectPath;
 
   init {
     buffers = Dictionary.new;
+    projectPath = projectPath.standardizePath; 
+    this.storeMainPathVariables;
     this.initProjectPath;
     this.initTemplateManager;
+  }
+
+  storeMainPathVariables {
+    buffersPath = projectPath ++ "/buffers";
+    modulesPath = projectPath ++ "/modules";
+    initPath = projectPath ++ "/init";
+    configPath = projectPath   ++ "/config.scd";
   }
 
   initWithPath {
@@ -46,7 +56,7 @@ Cactus { var <projectPath;
           fileMode: 2,
           stripResult: true);
       },
-      { projectPath = projectPath.standardizePath; this.initWithPath }
+      { this.initWithPath }
     );
   }
 
@@ -63,23 +73,20 @@ Cactus { var <projectPath;
     ("\n  " ++ projectPath.basename ++ " has been initialised. \n").postln;
   }
 
-  runConfig { var path;
+  runConfig {
     "Running \'config.scd\'".postln;
-    path = projectPath ++ "/config.scd";
-    path.load.value;
+    configPath.load.value;
   }
 
   runUserInit { var path;
-    path = projectPath ++ "/init/";
-    path = PathName(path);
+    path = PathName(initPath);
     path.files.do{ arg i;
       i.fullPath.load.value;
     };
   }
 
   runModuleInits { var path;
-    path = projectPath ++ "/modules/";
-    path = PathName(path);
+    path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
       initPath = PathName(folder.fullPath++"/init");
       initPath.files.do{ arg i;
@@ -89,14 +96,12 @@ Cactus { var <projectPath;
   }
 
   runModule { arg name, args; var path;
-    path = projectPath ++ "/modules/";
-    path = path ++ name ++ "/run.scd";
+    path = modulesPath +/+ name ++ "/run.scd";
     path.load.value(args);
   }
 
   listModules { var path;
-    path = projectPath ++ "/modules/";
-    path = PathName(path);
+    path = PathName(modulesPath);
     this.printNewLine;
     path.folders.do{ arg i; i.folderName.postln};
     this.printNewLine;
@@ -115,20 +120,13 @@ Cactus { var <projectPath;
     }).play;
   }
 
-  createDirs { var buffersPath, modulePath, initPath, configPath;
-
-    buffersPath = projectPath ++ "/buffers";
-    modulePath = projectPath ++ "/modules";
-    initPath = projectPath ++ "/init";
-    configPath = projectPath   ++ "/config.scd";
-
+  createDirs {
     this.checkAndCreateDir(projectPath, "Project");
     this.checkAndCreateDir(buffersPath, "Buffers");
-    this.checkAndCreateDir(modulePath, "Modules");
+    this.checkAndCreateDir(modulesPath, "Modules");
     this.checkAndCreateDir(initPath, "Init");
     this.checkAndCreateFile(configPath, "Configuration");
     this.printNewLine;
-
   }
 
   checkAndCreateDir { arg path, name;
@@ -151,7 +149,7 @@ Cactus { var <projectPath;
 
   loadBuffers { var bufferArray;
     this.clearBuffers;
-    bufferArray = SoundFile.collectIntoBuffers(projectPath ++ "/buffers/*/*");
+    bufferArray = SoundFile.collectIntoBuffers(buffersPath ++ "/*/*");
     bufferArray = this.gatherBuffersFromModules(bufferArray);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
       folderName = this.getFolderNameFromString(soundFile.path);
@@ -175,7 +173,7 @@ Cactus { var <projectPath;
   }
 
   gatherBuffersFromModules { arg bufferArray;
-    PathName(projectPath ++ "/modules").folders.do{
+    PathName(modulesPath).folders.do{
       arg folder; var newBufs;
       newBufs = SoundFile.collectIntoBuffers(folder.fullPath ++ "/buffers/*/*");
       bufferArray = bufferArray.addAll(newBufs);
@@ -195,7 +193,7 @@ Cactus { var <projectPath;
   }
 
   listModulesGUI { var path; var gui, infoGUI, infoWin;
-    path = projectPath ++ "/modules/";
+    path = modulesPath;
     path = PathName(path);
 
     gui = EZListView.new(nil,200@200, "Modules");
