@@ -192,11 +192,18 @@ Cactus { var <projectPath;
     this.runUserInit;
   }
 
-  listModulesGUI { var path; var gui, infoGUI, infoWin;
-    path = modulesPath;
+  listModulesGUI {
+    this.listGUI(modulesPath);
+  }
+
+  listTemplatesGUI {
+    this.listGUI(templateManager.templatesDir);
+  }
+
+  listGUI { arg path, action; var gui, infoGUI, infoWin;
     path = PathName(path);
 
-    gui = EZListView.new(nil,200@200, "Modules");
+    gui = EZListView.new(nil,200@200, "");
     gui.font = Font("Monaco", 11);
     infoWin = Window(
       "Info",
@@ -209,10 +216,10 @@ Cactus { var <projectPath;
     infoGUI.font = Font("Monaco", 11);
 
     path.folders.do{
-      arg module; var name, info;
-      name = module.folderName;
+      arg item; var name, info;
+      name = item.folderName;
       File.use(
-        path.fullPath ++ "/" ++ module.folderName ++ "/" ++ "readme.txt", "r",
+        path.fullPath ++ "/" ++ item.folderName ++ "/" ++ "readme.txt", "r",
         {
           arg f; info = f.readAllString;
           gui.addItem(name, { infoGUI.string = info });
