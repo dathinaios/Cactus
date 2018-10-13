@@ -8,6 +8,58 @@ Cactus { var <projectPath;
     ^super.newCopyArgs(projectPath).init;
   }
 
+  // public
+
+  runModule { arg name, args; var path;
+    path = modulesPath +/+ name ++ "/run.scd";
+    path.load.value(args);
+  }
+
+  listModules { var path;
+    path = PathName(modulesPath);
+    this.printNewLine;
+    path.folders.do{ arg i; i.folderName.postln};
+    this.printNewLine;
+  }
+
+  runTemplate { arg templateName, options = ();
+    options.projectName = "\\" ++ projectName;
+    options.projectPath = "\"" ++ projectPath ++ "\"";
+    options.targetDir = projectPath;
+    this.templateManager.runTemplate(
+      templateName, options
+    );
+    Routine({
+      1.wait;
+      this.restart;
+    }).play;
+  }
+
+  openProjectDir {
+    projectPath.openOS;
+  }
+
+  clearBuffers {
+    buffers.do{arg i; i.free;};
+    buffers.clear;
+  }
+
+  restart {
+    this.loadBuffers;
+    this.displayLoadInfo;
+    this.runUserInit;
+  }
+
+  listModulesGUI {
+    this.listGUI(modulesPath);
+  }
+
+  listTemplatesGUI {
+    this.listGUI(templateManager.templatesDir);
+  }
+
+  // private
+
   *initClass {
     at = Dictionary.new;
   }
@@ -95,31 +147,6 @@ Cactus { var <projectPath;
     });
   }
 
-  runModule { arg name, args; var path;
-    path = modulesPath +/+ name ++ "/run.scd";
-    path.load.value(args);
-  }
-
-  listModules { var path;
-    path = PathName(modulesPath);
-    this.printNewLine;
-    path.folders.do{ arg i; i.folderName.postln};
-    this.printNewLine;
-  }
-
-  runTemplate { arg templateName, options = ();
-    options.projectName = "\\" ++ projectName;
-    options.projectPath = "\"" ++ projectPath ++ "\"";
-    options.targetDir = projectPath;
-    this.templateManager.runTemplate(
-      templateName, options
-    );
-    Routine({
-      1.wait;
-      this.restart;
-    }).play;
-  }
-
   createDirs {
     this.checkAndCreateDir(projectPath, "Project");
     this.checkAndCreateDir(buffersPath, "Buffers");
@@ -141,10 +168,6 @@ Cactus { var <projectPath;
       File.new(path, "w").write("");
       ("created: " ++ path ++ "\n").postln;
     },{( "  " ++ name ++ " File - Done" ).postln});
-  }
-
-  openProjectDir {
-    projectPath.openOS;
   }
 
   loadBuffers { var bufferArray;
@@ -181,25 +204,6 @@ Cactus { var <projectPath;
     ^bufferArray;
   }
 
-  clearBuffers {
-    buffers.do{arg i; i.free;};
-    buffers.clear;
-  }
-
-  restart {
-    this.loadBuffers;
-    this.displayLoadInfo;
-    this.runUserInit;
-  }
-
-  listModulesGUI {
-    this.listGUI(modulesPath);
-  }
-
-  listTemplatesGUI {
-    this.listGUI(templateManager.templatesDir);
-  }
-
   listGUI { arg path, action; var gui, infoGUI, infoWin;
     path = PathName(path);
 
@@ -228,7 +232,6 @@ Cactus { var <projectPath;
     };
 
     gui.valueAction = 0;
-
   }
 
   //helper methods
