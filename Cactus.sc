@@ -12,7 +12,7 @@ Cactus { var <projectPath;
 
   runModule { arg name, args; var path;
     path = modulesPath +/+ name ++ "/run.scd";
-    path.load.value(args);
+    path.load.valueWithEnvir(args);
   }
 
   listModules { var path;
@@ -48,6 +48,7 @@ Cactus { var <projectPath;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
+    this.runModuleInits;
   }
 
   listModulesGUI {
