@@ -67,7 +67,6 @@ Cactus { var <projectPath;
   init {
     buffers = Dictionary.new;
     projectPath = projectPath.standardizePath; 
-    this.storeMainPathVariables;
     this.initProjectPath;
     this.initTemplateManager;
   }
@@ -80,6 +79,7 @@ Cactus { var <projectPath;
   }
 
   initWithPath {
+    this.storeMainPathVariables;
     this.initProjectName;
     this.displayWelcome;
     this.createDirs;
@@ -106,7 +106,9 @@ Cactus { var <projectPath;
             this.openProjectDir;
           },
           fileMode: 2,
-          stripResult: true);
+          stripResult: true,
+          acceptMode: 1
+        );
       },
       { this.initWithPath }
     );
