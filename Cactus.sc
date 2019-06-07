@@ -2,6 +2,7 @@
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager;
          var <buffersPath, <modulesPath, <initPath, <configPath;
+         var <at;
          classvar <at;
 
   *new { arg projectPath;
@@ -59,6 +60,10 @@ Cactus { var <projectPath;
     this.listGUI(templateManager.templatesDir);
   }
 
+  buf { arg name;
+    ^this.buffers.at(name);
+  }
+
   // private
 
   *initClass {
@@ -67,6 +72,7 @@ Cactus { var <projectPath;
 
   init {
     buffers = Dictionary.new;
+    at = Dictionary.new;
     projectPath = projectPath.standardizePath; 
     this.initProjectPath;
     this.initTemplateManager;
