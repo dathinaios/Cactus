@@ -2,7 +2,7 @@
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager;
          var <buffersPath, <modulesPath, <initPath, <configPath;
-         var <at;
+         var <at, bufferInfoString = "";
          classvar <at;
 
   *new { arg projectPath;
@@ -62,6 +62,10 @@ Cactus { var <projectPath;
 
   buf { arg name;
     ^this.buffers.at(name);
+  }
+
+  printBufferInfo {
+   bufferInfoString.postln; 
   }
 
   // private
@@ -192,18 +196,18 @@ Cactus { var <projectPath;
   }
 
   storeBuffersAsCollection { arg folderName, soundFile;
-      if(buffers.at(folderName).isNil, {
-        buffers.put(folderName, List.new);
-        // TODO: move this print information to a seperate method
-        // ("Buffer group " ++ folderName  ++ " contains:").postln;
-      });
-      buffers.at(folderName).add(soundFile);
+    if(buffers.at(folderName).isNil, {
+      buffers.put(folderName, List.new);
+      // this method for listing buffers in the next line is temporary
+      bufferInfoString = bufferInfoString ++ ("Buffer group " ++ folderName  ++ " contains:\n");
+    });
+    buffers.at(folderName).add(soundFile);
   }
 
   storeBufferByName{ arg soundFile, folderName, soundFileName;
-      buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
-      // TODO: move this print information to a seperate method
-      // ("  ->  " ++ soundFileName).postln;
+    buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
+    // this method for listing buffers in the next line is temporary
+    bufferInfoString = bufferInfoString ++ ("  ->  " ++ soundFileName ++ "\n");
   }
 
   gatherBuffersFromModules { arg bufferArray;
