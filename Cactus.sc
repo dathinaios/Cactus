@@ -73,7 +73,7 @@ Cactus { var <projectPath;
   init {
     buffers = Dictionary.new;
     at = Dictionary.new;
-    projectPath = projectPath.standardizePath; 
+    projectPath = projectPath.standardizePath;
     this.initProjectPath;
     this.initTemplateManager;
   }
@@ -99,8 +99,8 @@ Cactus { var <projectPath;
 
   initProjectName {
     projectName = projectPath.basename.asSymbol;
-    at[projectName] = this;
-    at[\instance] = this;
+    Cactus.at[projectName] = this;
+    Cactus.at[\instance] = this;
   }
 
   initProjectPath {
@@ -160,8 +160,8 @@ Cactus { var <projectPath;
     this.checkAndCreateDir(projectPath, "Project");
     this.checkAndCreateDir(buffersPath, "Buffers");
     this.checkAndCreateDir(modulesPath, "Modules");
-    this.checkAndCreateDir(initPath, "Init");
-    this.checkAndCreateFile(configPath, "Configuration");
+    this.checkAndCreateDir(initPath, "Initial");
+    this.checkAndCreateFile(configPath, "Config");
     this.printNewLine;
   }
 
@@ -194,14 +194,16 @@ Cactus { var <projectPath;
   storeBuffersAsCollection { arg folderName, soundFile;
       if(buffers.at(folderName).isNil, {
         buffers.put(folderName, List.new);
-        ("Buffer group " ++ folderName  ++ " contains:").postln;
+        // TODO: move this print information to a seperate method
+        // ("Buffer group " ++ folderName  ++ " contains:").postln;
       });
       buffers.at(folderName).add(soundFile);
   }
 
   storeBufferByName{ arg soundFile, folderName, soundFileName;
       buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
-      ("  ->  " ++ soundFileName).postln;
+      // TODO: move this print information to a seperate method
+      // ("  ->  " ++ soundFileName).postln;
   }
 
   gatherBuffersFromModules { arg bufferArray;
