@@ -1,7 +1,7 @@
 
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager;
-         var <buffersPath, <modulesPath, <initPath, <configPath;
+         var <buffersPath, <modulesPath, <initPath, <configPath, <cleanupPath;
          var <at, bufferInfoString = "";
          classvar <at;
 
@@ -46,6 +46,8 @@ Cactus { var <projectPath;
   }
 
   restart {
+    this.printNewLine;
+    this.runCleanUp;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
@@ -87,6 +89,7 @@ Cactus { var <projectPath;
     modulesPath = projectPath ++ "/modules";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
+    cleanupPath = projectPath   ++ "/cleanup.scd";
   }
 
   initWithPath {
@@ -143,6 +146,11 @@ Cactus { var <projectPath;
     configPath.load.value;
   }
 
+  runCleanUp {
+    "Running \'cleanup.scd\'".postln;
+    cleanupPath.load.value;
+  }
+
   runUserInit { var path;
     path = PathName(initPath);
     path.files.do{ arg i;
@@ -166,7 +174,8 @@ Cactus { var <projectPath;
     this.checkAndCreateDir(modulesPath, "Modules");
     this.checkAndCreateDir(initPath, "Initial");
     this.checkAndCreateFile(configPath, "Config");
-    this.printNewLine;
+    this.checkAndCreateFile(cleanupPath, "CleanUp");
+    // this.printNewLine;
   }
 
   checkAndCreateDir { arg path, name;
