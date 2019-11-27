@@ -171,7 +171,7 @@ Cactus { var <projectPath;
   createDirs {
     this.checkAndCreateDir(projectPath, "Project");
     this.checkAndCreateDir(buffersPath, "Buffers");
-    this.checkAndCreateDir(modulesPath, "Modules");
+    // this.checkAndCreateDir(modulesPath, "Modules");
     this.checkAndCreateDir(initPath, "Initial");
     this.checkAndCreateFile(configPath, "Config");
     this.checkAndCreateFile(cleanupPath, "CleanUp");
@@ -194,7 +194,8 @@ Cactus { var <projectPath;
 
   loadBuffers { var bufferArray;
     this.clearBuffers;
-    bufferArray = SoundFile.collectIntoBuffers(buffersPath ++ "/*/*");
+    buffersPath.postln;
+    bufferArray = this.collectIntoBuffers(buffersPath);
     bufferArray = this.gatherBuffersFromModules(bufferArray);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
       folderName = this.getFolderNameFromString(soundFile.path);
@@ -202,6 +203,18 @@ Cactus { var <projectPath;
       this.storeBuffersAsCollection(folderName, soundFile);
       this.storeBufferByName(soundFile, folderName, soundFileName);
     };
+  }
+
+  collectIntoBuffers { arg path; var list;
+    list = Array.new;
+    path.postln;
+    PathName(path).folders.do{ arg folder;
+      PathName(folder.fullPath).files.do{arg i;
+        list = list.add(
+          Buffer.read(Server.default, i.fullPath))
+      };
+    }
+    ^list
   }
 
   storeBuffersAsCollection { arg folderName, soundFile;
@@ -222,7 +235,7 @@ Cactus { var <projectPath;
   gatherBuffersFromModules { arg bufferArray;
     PathName(modulesPath).folders.do{
       arg folder; var newBufs;
-      newBufs = SoundFile.collectIntoBuffers(folder.fullPath ++ "/buffers/*/*");
+      newBufs = this.collectIntoBuffers(folder.fullPath ++ "/buffers");
       bufferArray = bufferArray.addAll(newBufs);
     };
     ^bufferArray;
