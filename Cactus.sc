@@ -1,7 +1,7 @@
 
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager;
-         var <buffersPath, <modulesPath, <initPath, <configPath, <cleanupPath;
+         var <buffersPath, <initPath, <configPath, <cleanupPath;
          var <at, bufferInfoString = "";
          classvar <at;
 
@@ -10,18 +10,6 @@ Cactus { var <projectPath;
   }
 
   // public
-
-  runModule { arg name, args; var path;
-    path = modulesPath +/+ name ++ "/run.scd";
-    path.load.valueWithEnvir(args);
-  }
-
-  listModules { var path;
-    path = PathName(modulesPath);
-    this.printNewLine;
-    path.folders.do{ arg i; i.folderName.postln};
-    this.printNewLine;
-  }
 
   runTemplate { arg templateName, options = ();
     options.projectName = "\\" ++ projectName;
@@ -51,15 +39,10 @@ Cactus { var <projectPath;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
-    this.runModuleInits;
-  }
-
-  listModulesGUI {
-    this.listGUI(modulesPath);
   }
 
   listTemplatesGUI {
-    this.listGUI(templateManager.templatesDir);
+    templateManager.gui;
   }
 
   buf { arg name;
@@ -86,7 +69,6 @@ Cactus { var <projectPath;
 
   storeMainPathVariables {
     buffersPath = projectPath ++ "/buffers";
-    modulesPath = projectPath ++ "/modules";
     initPath = projectPath ++ "/init";
     configPath = projectPath   ++ "/config.scd";
     cleanupPath = projectPath   ++ "/cleanup.scd";
@@ -101,7 +83,6 @@ Cactus { var <projectPath;
     this.displayLoadInfo;
     this.runConfig;
     this.runUserInit;
-    this.runModuleInits;
   }
 
   initProjectName {
@@ -158,20 +139,9 @@ Cactus { var <projectPath;
     };
   }
 
-  runModuleInits { var path;
-    path = PathName(modulesPath);
-    path.folders.do({ arg folder; var initPath;
-      initPath = PathName(folder.fullPath++"/init");
-      initPath.files.do{ arg i;
-        i.fullPath.load.value;
-      };
-    });
-  }
-
   createDirs {
     this.checkAndCreateDir(projectPath, "Project");
     this.checkAndCreateDir(buffersPath, "Buffers");
-    // this.checkAndCreateDir(modulesPath, "Modules");
     this.checkAndCreateDir(initPath, "Initial");
     this.checkAndCreateFile(configPath, "Config");
     this.checkAndCreateFile(cleanupPath, "CleanUp");
@@ -196,7 +166,6 @@ Cactus { var <projectPath;
     this.clearBuffers;
     buffersPath.postln;
     bufferArray = this.collectIntoBuffers(buffersPath);
-    bufferArray = this.gatherBuffersFromModules(bufferArray);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
       folderName = this.getFolderNameFromString(soundFile.path);
       soundFileName = this.getFileNameWithoutExtension(soundFile.path);
@@ -230,45 +199,6 @@ Cactus { var <projectPath;
     buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
     // this method for listing buffers in the next line is temporary
     bufferInfoString = bufferInfoString ++ ("  ->  " ++ soundFileName ++ "\n");
-  }
-
-  gatherBuffersFromModules { arg bufferArray;
-    PathName(modulesPath).folders.do{
-      arg folder; var newBufs;
-      newBufs = this.collectIntoBuffers(folder.fullPath ++ "/buffers");
-      bufferArray = bufferArray.addAll(newBufs);
-    };
-    ^bufferArray;
-  }
-
-  listGUI { arg path, action; var gui, infoGUI, infoWin;
-    path = PathName(path);
-
-    gui = EZListView.new(nil,200@200, "");
-    gui.font = Font("Monaco", 11);
-    infoWin = Window(
-      "Info",
-      Rect(
-        gui.window.bounds.left+gui.window.bounds.width,
-        gui.window.bounds.top-200, 400, 400),
-      scroll: true
-    ).front;
-    infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
-    infoGUI.font = Font("Monaco", 11);
-
-    path.folders.do{
-      arg item; var name, info;
-      name = item.folderName;
-      File.use(
-        path.fullPath ++ "/" ++ item.folderName ++ "/" ++ "readme.txt", "r",
-        {
-          arg f; info = f.readAllString;
-          gui.addItem(name, { infoGUI.string = info });
-        }
-      );
-    };
-
-    gui.valueAction = 0;
   }
 
   //helper methods
