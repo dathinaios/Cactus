@@ -95,4 +95,39 @@ CactusTemplateManager { var <cactusDir, <templatesDir;
     };
   }
 
+  gui {
+    this.listGUI(templatesDir);
+  }
+
+  listGUI { arg path, action; var gui, infoGUI, infoWin;
+    path = PathName(path);
+
+    gui = EZListView.new(nil,200@200, "");
+    gui.font = Font("Monaco", 11);
+    infoWin = Window(
+      "Info",
+      Rect(
+        gui.window.bounds.left+gui.window.bounds.width,
+        gui.window.bounds.top-200, 400, 400),
+      scroll: true
+    ).front;
+    infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
+    infoGUI.font = Font("Monaco", 11);
+
+    path.folders.do{
+      arg item; var name, info;
+      name = item.folderName;
+      File.use(
+        path.fullPath ++ "/" ++ item.folderName ++ "/" ++ "readme.txt", "r",
+        {
+          arg f; info = f.readAllString;
+          gui.addItem(name, { infoGUI.string = info });
+        }
+      );
+    };
+
+    gui.valueAction = 0;
+  }
+
+
 }
