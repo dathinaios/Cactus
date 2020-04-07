@@ -1,13 +1,22 @@
 
-CactusTemplateManager { var <cactusDir, <templatesDir;
+CactusTemplateManager { var <>templatesDir;
 
-  *new {
-    ^super.newCopyArgs.init;
+  *new { arg templatesDir;
+    ^super.newCopyArgs(templatesDir).init;
   }
 
   init {
-    cactusDir = Cactus.filenameSymbol.asString.dirname;
-    templatesDir = cactusDir++"/templates/";
+    templatesDir ?? {
+      templatesDir = CactusTemplateManager.filenameSymbol.asString.dirname;
+      templatesDir = templatesDir ++ "/templates/"
+    };
+  }
+
+  runTemplate { arg templateName, options = (); var path;
+    path = PathName.new(templatesDir ++ templateName);
+    this.copyTemplateBaseFiles(path, options);
+    this.copyTemplateSubFolderFiles(path, options);
+    this.copyModules(path, options);
   }
 
   argFormatFile { arg path, options;
@@ -42,13 +51,6 @@ CactusTemplateManager { var <cactusDir, <templatesDir;
       ("A file named" + targetFilePath.basename + "was already there!").postln;
       ("Renamed it to" + targetFilePath.basename ++ ".bkp").postln;
     });
-  }
-
-  runTemplate { arg templateName, options = (); var path;
-    path = PathName.new(templatesDir ++ templateName);
-    this.copyTemplateBaseFiles(path, options);
-    this.copyTemplateSubFolderFiles(path, options);
-    this.copyModules(path, options);
   }
 
   copyTemplateBaseFiles { arg path, options;
@@ -128,6 +130,5 @@ CactusTemplateManager { var <cactusDir, <templatesDir;
 
     gui.valueAction = 0;
   }
-
 
 }
