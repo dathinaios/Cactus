@@ -35,7 +35,7 @@ CactusTemplateManager { var <>templatesDir;
 
     targetFilePath = targetDir ++ "/" ++ sourcePath.fileName;
     targetFilePath = targetFilePath.standardizePath;
-    generatedFileContent = this.argFormatFile(
+    generatedFileContent = this.parseTemplateFile(
       path: sourcePath.fullPath,
       options: options);
     this.carefullyCreateFile(targetFilePath, generatedFileContent)
@@ -44,7 +44,7 @@ CactusTemplateManager { var <>templatesDir;
   carefullyCreateFile{ arg targetFilePath, generatedFileContent;
     if (File.exists(targetFilePath).not, {
       this.createTheFile(targetFilePath, generatedFileContent)
-    },{ 
+    },{
       this.createBackupFileCopy(targetFilePath, generatedFileContent);
       this.createTheFile(targetFilePath, generatedFileContent);
     });
@@ -63,12 +63,12 @@ CactusTemplateManager { var <>templatesDir;
       ("Renamed old file to" + targetFilePath.basename ++ ".bkp").postln;
   }
 
-  argFormatFile { arg path, options;
+  parseTemplateFile { arg path, options;
     File.use(path.standardizePath, "r", {
       arg file; var string;
       string = file.readAllString;
       options.pairsDo{ arg key, value;
-        string = string.replace(key.asString, value.asString);
+        string = string.replace("{{" ++ key.asString ++ "}}", value.value.asString);
       };
       ^string;
     });
