@@ -11,19 +11,6 @@ Cactus { var <projectPath;
 
   // Public
 
-  runTemplate { arg templateName, options = ();
-    options.projectName = "\\" ++ projectName;
-    options.projectPath = "\"" ++ projectPath ++ "\"";
-    options.targetDir = projectPath;
-    this.templateManager.runTemplate(
-      templateName, options
-    );
-    Routine({
-      1.wait;
-      this.restart;
-    }).play;
-  }
-
   openProjectDir {
     projectPath.openOS;
   }
@@ -41,16 +28,29 @@ Cactus { var <projectPath;
     this.runUserInit;
   }
 
-  listTemplatesGUI {
-    templateManager.gui;
-  }
-
   buf { arg name;
     ^this.buffers.at(name);
   }
 
   printBufferInfo {
    bufferInfoString.postln;
+  }
+
+  runTemplate { arg templateName, options = ();
+    options.projectName = "\\" ++ projectName;
+    options.projectPath = "\"" ++ projectPath ++ "\"";
+    options.targetDir = projectPath;
+    this.templateManager.runTemplate(
+      templateName, options
+    );
+    Routine({
+      1.wait;
+      this.restart;
+    }).play;
+  }
+
+  listTemplatesGUI {
+    templateManager.gui;
   }
 
   // Private
@@ -136,7 +136,6 @@ Cactus { var <projectPath;
     this.checkAndCreateDir(initPath, "Initial");
     this.checkAndCreateFile(configPath, "Config");
     this.checkAndCreateFile(cleanupPath, "CleanUp");
-    // this.printNewLine;
   }
 
   loadBuffers { var bufferArray;
@@ -164,16 +163,12 @@ Cactus { var <projectPath;
   storeBuffersAsCollection { arg folderName, soundFile;
     if(buffers.at(folderName).isNil, {
       buffers.put(folderName, List.new);
-      // this method for listing buffers in the next line is temporary
-      bufferInfoString = bufferInfoString ++ ("Buffer group " ++ folderName  ++ " contains:\n");
     });
     buffers.at(folderName).add(soundFile);
   }
 
   storeBufferByName{ arg soundFile, folderName, soundFileName;
     buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
-    // this method for listing buffers in the next line is temporary
-    bufferInfoString = bufferInfoString ++ ("  ->  " ++ soundFileName ++ "\n");
   }
 
   // Helper Methods
@@ -204,13 +199,12 @@ Cactus { var <projectPath;
     this.printDivider;
   }
 
-
   printNewLine {
-   "\n".postln;
+    "\n".postln;
   }
 
   printDivider {
-   "-----------------------------".postln;
+    "-----------------------------".postln;
   }
 
   displayWelcome {
@@ -223,7 +217,6 @@ Cactus { var <projectPath;
     ("\'" ++ projectPath.basename ++ "\'" ++ " has initialised >>> ").postln;
     this.printDivider;
   }
-
 
   getFolderNameFromString { arg path;
     ^path.dirname.split.last;
