@@ -15,8 +15,52 @@ CactusTemplateManager { var <>templatesDir;
   runTemplate { arg templateName, options = (); var path;
     path = PathName.new(templatesDir ++ templateName);
     this.copyTemplateBaseFiles(path, options);
-    this.copyTemplateSubFolderFiles(path, options);
-    this.copyModules(path, options);
+    // this.copyTemplateSubFolderFiles(path, options);
+    // this.copyModules(path, options);
+  }
+
+  copyTemplateBaseFiles { arg path, options;
+    path.files.do{ arg file;
+      this.createFromTemplateFile(
+        sourcePath: file,
+        targetDir: options.targetDir,
+        options: options
+      );
+    };
+  }
+
+  createFromTemplateFile {
+    arg sourcePath, targetDir, options;
+    var targetFilePath, generatedFileContent;
+
+    targetFilePath = targetDir ++ "/" ++ sourcePath.fileName;
+    targetFilePath = targetFilePath.standardizePath;
+    generatedFileContent = this.argFormatFile(
+      path: sourcePath.fullPath,
+      options: options);
+    this.carefullyCreateFile(targetFilePath, generatedFileContent)
+  }
+
+  carefullyCreateFile{ arg targetFilePath, generatedFileContent;
+    if (File.exists(targetFilePath).not, {
+      this.createTheFile(targetFilePath, generatedFileContent)
+    },{ 
+      this.createBackupFileCopy(targetFilePath, generatedFileContent);
+      this.createTheFile(targetFilePath, generatedFileContent);
+    });
+  }
+
+  createTheFile { arg targetFilePath, generatedFileContent;
+      File.new(targetFilePath.standardizePath, "w").write(generatedFileContent).close;
+      ("File" + targetFilePath.basename + "has been created.").postln;
+  }
+
+  createBackupFileCopy { arg targetFilePath;
+      File.copy(
+        targetFilePath.standardizePath,
+        targetFilePath.standardizePath ++ "." ++ UniqueID.next ++ ".bkp");
+      ("A file named" + targetFilePath.basename + "was already there!").postln;
+      ("Renamed old file to" + targetFilePath.basename ++ ".bkp").postln;
   }
 
   argFormatFile { arg path, options;
@@ -30,41 +74,7 @@ CactusTemplateManager { var <>templatesDir;
     });
   }
 
-  createFromTemplateFile {
-    arg sourcePath, targetDir, options;
-    var targetFilePath, generatedString;
-
-    targetFilePath = targetDir ++ "/" ++ sourcePath.fileName;
-    generatedString = this.argFormatFile(
-      path: sourcePath.fullPath,
-      options: options
-    );
-    if ( File.exists(targetFilePath).not, {
-      File.new(targetFilePath.standardizePath, "w").write(generatedString).close;
-      ("File" + targetFilePath.basename + "created").postln;
-    },{
-      File.copy(
-        targetFilePath.standardizePath,
-        targetFilePath.standardizePath ++ ".bkp"++(120000.rand)
-      );
-      File.new(targetFilePath.standardizePath, "w").write(generatedString).close;
-      ("A file named" + targetFilePath.basename + "was already there!").postln;
-      ("Renamed it to" + targetFilePath.basename ++ ".bkp").postln;
-    });
-  }
-
-  copyTemplateBaseFiles { arg path, options;
-    path.files.do{ arg file;
-      if(file.extension != "txt")
-      {
-        this.createFromTemplateFile(
-          sourcePath: file,
-          targetDir: options.targetDir,
-          options: options
-        );
-      }
-    };
-  }
+  // obsolete
 
   copyTemplateSubFolderFiles { arg path, options;
     path.folders.do{ arg folder;
@@ -78,22 +88,6 @@ CactusTemplateManager { var <>templatesDir;
           );
         }
       };
-    };
-  }
-
-  copyModules { arg path, options;
-    path = path +/+ "modules";
-    path.folders.do{ arg folder; var sourceDir, targetDir;
-      sourceDir = folder.fullPath;
-      targetDir = options.targetDir ++ "/modules/" ++ folder.folderName;
-      ("cp -r" + sourceDir + targetDir).unixCmd({
-        arg code;
-        if(code == 0, {
-          ("succesfully copied module" + sourceDir.basename).postln;
-        },{
-          ("Could not copy module" + sourceDir.basename).postln;
-        });
-      }, false);
     };
   }
 
@@ -129,6 +123,22 @@ CactusTemplateManager { var <>templatesDir;
     };
 
     gui.valueAction = 0;
+  }
+
+  copyModules { arg path, options;
+    path = path +/+ "modules";
+    path.folders.do{ arg folder; var sourceDir, targetDir;
+      sourceDir = folder.fullPath;
+      targetDir = options.targetDir ++ "/modules/" ++ folder.folderName;
+      ("cp -r" + sourceDir + targetDir).unixCmd({
+        arg code;
+        if(code == 0, {
+          ("succesfully copied module" + sourceDir.basename).postln;
+        },{
+          ("Could not copy module" + sourceDir.basename).postln;
+        });
+      }, false);
+    };
   }
 
 }
