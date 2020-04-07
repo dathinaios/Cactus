@@ -9,7 +9,7 @@ Cactus { var <projectPath;
     ^super.newCopyArgs(projectPath).init;
   }
 
-  // public
+  // Public
 
   runTemplate { arg templateName, options = ();
     options.projectName = "\\" ++ projectName;
@@ -50,10 +50,10 @@ Cactus { var <projectPath;
   }
 
   printBufferInfo {
-   bufferInfoString.postln; 
+   bufferInfoString.postln;
   }
 
-  // private
+  // Private
 
   *initClass {
     at = Dictionary.new;
@@ -113,22 +113,13 @@ Cactus { var <projectPath;
     templateManager = CactusTemplateManager.new;
   }
 
-  displayWelcome {
-    "\n  Welcome to Cactus".postln;
-      "  ----------------- \n".postln;
-  }
-
-  displayLoadInfo {
-    ("\n  " ++ projectPath.basename ++ " has been initialised. \n").postln;
-  }
-
   runConfig {
-    "Running \'config.scd\'".postln;
+    this.postConfigInfo;
     configPath.load.value;
   }
 
   runCleanUp {
-    "Running \'cleanup.scd\'".postln;
+    this.postCleanupInfo;
     cleanupPath.load.value;
   }
 
@@ -148,23 +139,8 @@ Cactus { var <projectPath;
     // this.printNewLine;
   }
 
-  checkAndCreateDir { arg path, name;
-    if ( File.exists(path).not, {
-      File.mkdir(path);
-      ("created: " ++ path).postln;
-    },{( "  " ++ name ++ " Dir - Done" ).postln});
-  }
-
-  checkAndCreateFile { arg path, name;
-    if ( File.exists(path).not, {
-      File.new(path, "w").write("");
-      ("created: " ++ path ++ "\n").postln;
-    },{( "  " ++ name ++ " File - Done" ).postln});
-  }
-
   loadBuffers { var bufferArray;
     this.clearBuffers;
-    buffersPath.postln;
     bufferArray = this.collectIntoBuffers(buffersPath);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
       folderName = this.getFolderNameFromString(soundFile.path);
@@ -176,7 +152,6 @@ Cactus { var <projectPath;
 
   collectIntoBuffers { arg path; var list;
     list = Array.new;
-    path.postln;
     PathName(path).folders.do{ arg folder;
       PathName(folder.fullPath).files.do{arg i;
         list = list.add(
@@ -201,11 +176,54 @@ Cactus { var <projectPath;
     bufferInfoString = bufferInfoString ++ ("  ->  " ++ soundFileName ++ "\n");
   }
 
-  //helper methods
+  // Helper Methods
+
+  checkAndCreateDir { arg path, name;
+    if ( File.exists(path).not, {
+      File.mkdir(path);
+      ("created: " ++ path).postln;
+    },{( "  " ++ name ++ " Dir - Done" ).postln});
+  }
+
+  checkAndCreateFile { arg path, name;
+    if ( File.exists(path).not, {
+      File.new(path, "w").write("");
+      ("created: " ++ path ++ "\n").postln;
+    },{( "  " ++ name ++ " File - Done" ).postln});
+  }
+
+  postConfigInfo {
+    this.printDivider;
+    "Running \'config.scd\' >>> ".postln;
+    this.printDivider;
+  }
+
+  postCleanupInfo {
+    this.printDivider;
+    "Running \'cleanup.scd\' >>> ".postln;
+    this.printDivider;
+  }
+
 
   printNewLine {
-   "\n".postln; 
+   "\n".postln;
   }
+
+  printDivider {
+   "-----------------------------".postln;
+  }
+
+  displayWelcome {
+    "\n  Welcome to Cactus".postln;
+      "  ----------------- \n".postln;
+  }
+
+  displayLoadInfo {
+    this.printDivider;
+    ("\'" ++ projectPath.basename ++ "\'" ++ " has initialised >>> ").postln;
+    this.printDivider;
+  }
+
 
   getFolderNameFromString { arg path;
     ^path.dirname.split.last;
