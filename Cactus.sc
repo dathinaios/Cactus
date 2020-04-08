@@ -2,7 +2,7 @@
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager;
          var <buffersPath, <initPath, <configPath, <cleanupPath;
-         var <at, bufferInfoString = "";
+         var <at;
          classvar <at;
 
   *new { arg projectPath;
@@ -30,10 +30,6 @@ Cactus { var <projectPath;
 
   buf { arg name;
     ^this.buffers.at(name);
-  }
-
-  printBufferInfo {
-   bufferInfoString.postln;
   }
 
   runTemplate { arg templateName, options = ();
