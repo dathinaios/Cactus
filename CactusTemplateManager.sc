@@ -15,7 +15,7 @@ CactusTemplateManager { var <>templatesDir;
   runTemplate { arg templateName, options = (); var path;
     path = PathName.new(templatesDir ++ templateName);
     this.copyTemplateBaseFiles(path, options);
-    // this.copyTemplateSubFolderFiles(path, options);
+    this.copyTemplateSubFolderFiles(path, options);
     // this.copyModules(path, options);
   }
 
@@ -29,11 +29,25 @@ CactusTemplateManager { var <>templatesDir;
     };
   }
 
+  copyTemplateSubFolderFiles { arg path, options;
+    path.folders.do{ arg folder;
+      folder.files.do{ arg file; var target;
+        target = options.targetDir +/+ file.folderName;
+        File.mkdir(target.standardizePath);
+        this.createFromTemplateFile(
+          sourcePath: file,
+          targetDir: target,
+          options: options
+        );
+      };
+    };
+  }
+
   createFromTemplateFile {
     arg sourcePath, targetDir, options;
     var targetFilePath, generatedFileContent;
 
-    targetFilePath = targetDir ++ "/" ++ sourcePath.fileName;
+    targetFilePath = targetDir +/+ sourcePath.fileName;
     targetFilePath = targetFilePath.standardizePath;
     generatedFileContent = this.parseTemplateFile(
       path: sourcePath.fullPath,
@@ -74,23 +88,8 @@ CactusTemplateManager { var <>templatesDir;
     });
   }
 
+
   // obsolete
-
-  copyTemplateSubFolderFiles { arg path, options;
-    path.folders.do{ arg folder;
-      folder.files.do{ arg file;
-        if(file.extension != "txt")
-        {
-          this.createFromTemplateFile(
-            sourcePath: file,
-            targetDir: options.targetDir +/+ file.folderName,
-            options: options
-          );
-        }
-      };
-    };
-  }
-
   gui {
     this.listGUI(templatesDir);
   }
