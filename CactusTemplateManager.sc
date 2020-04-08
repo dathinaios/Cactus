@@ -55,7 +55,8 @@ CactusTemplateManager { var <>templatesDir;
   }
 
   carefullyCreateFile{ arg targetFilePath, generatedFileContent;
-    if (File.exists(targetFilePath).not, {
+    if (File.exists(targetFilePath).not
+        or:{File.readAllString(targetFilePath).size == 0}, {
       this.createTheFile(targetFilePath, generatedFileContent)
     },{
       this.createBackupFileCopy(targetFilePath, generatedFileContent);
