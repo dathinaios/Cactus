@@ -37,20 +37,18 @@ Cactus { var <projectPath;
   }
 
   runTemplate { arg templateName, options = ();
-    options.projectName = "\\" ++ projectName;
-    options.projectPath = "\"" ++ projectPath ++ "\"";
-    options.targetDir = projectPath;
+    options = options ++ this.returnCoreOptions;
     this.templateManager.runTemplate(
-      templateName, options
-    );
-    Routine({
-      1.wait;
-      this.restart;
-    }).play;
+      templateName, options);
+    SystemClock.sched(1, {this.restart});
   }
 
-  listTemplatesGUI {
-    templateManager.gui;
+  returnCoreOptions { var options;
+    options = ();
+    options.projectName = projectName;
+    options.projectPath = projectPath;
+    options.targetDir = projectPath;
+    ^options
   }
 
   // Private
