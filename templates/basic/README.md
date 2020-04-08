@@ -1,0 +1,6 @@
+
+## Basic Template
+
+This is a basic template that creates a `start.scd` file with a bare minimum of code to get you going as well as one `init` file. Remember that the `config.scd` is run only once when you first initialize `Cactus` while the `init` files will run every time you call `restart` and after `cleanup`.
+
+Happy Composing! :)
