@@ -175,14 +175,14 @@ Cactus { var <projectPath;
     if ( File.exists(path).not, {
       File.mkdir(path);
       ("created: " ++ path).postln;
-    },{( "  " ++ name ++ " Dir - Done" ).postln});
+    },{( name ++ " Dir - √" ).postln});
   }
 
   checkAndCreateFile { arg path, name;
     if ( File.exists(path).not, {
       File.new(path, "w").write("");
       ("created: " ++ path ++ "\n").postln;
-    },{( "  " ++ name ++ " File - Done" ).postln});
+    },{( name ++ " File - √" ).postln});
   }
 
   postConfigInfo {
@@ -202,12 +202,12 @@ Cactus { var <projectPath;
   }
 
   printDivider {
-    "-----------------------------".postln;
+    "------------------------------------------".postln;
   }
 
   displayWelcome {
-    "\n  Welcome to Cactus".postln;
-      "  ----------------- \n".postln;
+    "\nWelcome to Cactus".postln;
+      "----------------- \n".postln;
   }
 
   displayLoadInfo {
