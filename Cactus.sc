@@ -39,6 +39,8 @@ Cactus { var <projectPath;
     SystemClock.sched(1, {this.restart});
   }
 
+  // Private
+
   returnCoreOptions { var options;
     options = ();
     options.projectName = projectName;
@@ -46,8 +48,6 @@ Cactus { var <projectPath;
     options.targetDir = projectPath;
     ^options
   }
-
-  // Private
 
   *initClass {
     at = Dictionary.new;
@@ -202,8 +202,9 @@ Cactus { var <projectPath;
   }
 
   displayWelcome {
-    "\nWelcome to Cactus".postln;
-      "----------------- \n".postln;
+      "~~~~~~~~~~~~~~~~~ \n".postln;
+      "Welcome to Cactus".postln;
+      "~~~~~~~~~~~~~~~~~ \n".postln;
   }
 
   displayLoadInfo {
