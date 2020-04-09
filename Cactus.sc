@@ -21,7 +21,6 @@ Cactus { var <projectPath;
   }
 
   restart {
-    this.printNewLine;
     this.runCleanUp;
     this.loadBuffers;
     this.displayLoadInfo;
@@ -182,15 +181,11 @@ Cactus { var <projectPath;
   }
 
   postConfigInfo {
-    "> Running \'config.scd\'".postln;
+    "-> Running \'config.scd\'".postln;
   }
 
   postCleanupInfo {
-    "> Running \'cleanup.scd\'".postln;
-  }
-
-  printNewLine {
-    "\n".postln;
+    "-> Running \'cleanup.scd\'".postln;
   }
 
   displayWelcome {
@@ -199,8 +194,7 @@ Cactus { var <projectPath;
   }
 
   displayLoadInfo {
-    "~~~~~~~~~~~~~~~~~ \n".postln;
-    ("> \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
+    ("-> \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
   }
 
   getFolderNameFromString { arg path;
