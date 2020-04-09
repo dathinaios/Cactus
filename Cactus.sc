@@ -190,10 +190,11 @@ Cactus { var <projectPath;
 
   displayWelcome {
       "Welcome to Cactus".postln;
-      "~~~~~~~~~~~~~~~~~ \n".postln;
+      "~~~~~~~~~~~~~~~~~".postln;
   }
 
   displayLoadInfo {
+    "\n".postln;
     ("-> \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
   }
 
