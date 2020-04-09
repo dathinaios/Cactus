@@ -144,11 +144,9 @@ Cactus { var <projectPath;
 
   collectIntoBuffers { arg path; var list;
     list = Array.new;
-    PathName(path).folders.do{ arg folder;
-      PathName(folder.fullPath).files.do{arg i;
-        list = list.add(
-          Buffer.read(Server.default, i.fullPath))
-      };
+    PathName(path).filesDo{ arg i;
+      list = list.add(
+      Buffer.read(Server.default, i.fullPath))
     }
     ^list
   }
