@@ -182,11 +182,11 @@ Cactus { var <projectPath;
   }
 
   postConfigInfo {
-    "Running \'config.scd\'".postln;
+    "> Running \'config.scd\'".postln;
   }
 
   postCleanupInfo {
-    "Running \'cleanup.scd\'".postln;
+    "> Running \'cleanup.scd\'".postln;
   }
 
   printNewLine {
@@ -200,7 +200,7 @@ Cactus { var <projectPath;
 
   displayLoadInfo {
     "~~~~~~~~~~~~~~~~~ \n".postln;
-    ("\'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
+    ("> \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
   }
 
   getFolderNameFromString { arg path;
