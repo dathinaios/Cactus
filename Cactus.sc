@@ -135,7 +135,7 @@ Cactus { var <projectPath;
     this.clearBuffers;
     bufferArray = this.collectIntoBuffers(buffersPath);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
-      folderName = this.getFolderNameFromString(soundFile.path);
+      folderName = this.getPathAfterBuffersFolder(soundFile.path);
       soundFileName = this.getFileNameWithoutExtension(soundFile.path);
       this.storeBuffersAsCollection(folderName, soundFile);
       this.storeBufferByName(soundFile, folderName, soundFileName);
@@ -160,6 +160,18 @@ Cactus { var <projectPath;
 
   storeBufferByName{ arg soundFile, folderName, soundFileName;
     buffers.put(folderName ++ "/" ++ soundFileName, soundFile);
+  }
+
+  getPathAfterBuffersFolder {
+    arg path; var result, done = false;
+    path = path.dirname.split;
+    result = "";
+    path.reverseDo{ arg item;
+      if(done.not and:{item != "buffers"},
+        {result = item +/+ result},
+        {done = true}
+      )};
+    ^result.withoutTrailingSlash;
   }
 
   // Helper Methods
