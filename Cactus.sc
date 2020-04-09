@@ -31,6 +31,10 @@ Cactus { var <projectPath;
     ^this.buffers.at(name);
   }
 
+  bufnums { arg name; var bufs;
+    ^this.buf(name).getCactusBufNums;
+  }
+
   runTemplate { arg templateName, options = ();
     options = options ++ this.returnCoreOptions;
     this.templateManager.runTemplate(
@@ -216,4 +220,16 @@ Cactus { var <projectPath;
     ^path.basename.splitext[0];
   }
 
+}
+
++ List {
+  getCactusBufNums{
+    ^this.collect{arg i; i.bufnum}
+  }
+}
+
++ Buffer {
+  getCactusBufNums{
+    ^this.bufnum
+  }
 }
