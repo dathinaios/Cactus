@@ -182,35 +182,25 @@ Cactus { var <projectPath;
   }
 
   postConfigInfo {
-    this.printDivider;
-    "Running \'config.scd\' >>> ".postln;
-    this.printDivider;
+    "Running \'config.scd\'".postln;
   }
 
   postCleanupInfo {
-    this.printDivider;
-    "Running \'cleanup.scd\' >>> ".postln;
-    this.printDivider;
+    "Running \'cleanup.scd\'".postln;
   }
 
   printNewLine {
     "\n".postln;
   }
 
-  printDivider {
-    "------------------------------------------".postln;
-  }
-
   displayWelcome {
-      "~~~~~~~~~~~~~~~~~ \n".postln;
       "Welcome to Cactus".postln;
       "~~~~~~~~~~~~~~~~~ \n".postln;
   }
 
   displayLoadInfo {
-    this.printDivider;
-    ("\'" ++ projectPath.basename ++ "\'" ++ " has initialised >>> ").postln;
-    this.printDivider;
+    "~~~~~~~~~~~~~~~~~ \n".postln;
+    ("\'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
   }
 
   getFolderNameFromString { arg path;
