@@ -1,0 +1,125 @@
+
+TITLE:: Cactus
+summary:: The core class for the the Cactus framework
+related:: Classes/Modules
+
+DESCRIPTION::
+
+A style agnostic framework for creative coding using the SuperCollider 
+audio programming language. At its most basic level it will:
+
+LIST::
+## Create a project file structure with configuration, initialisation and cleanup files.
+## Create a buffers folder from which it collects all sound files and make them available through an intuitive interface.
+## Allow for defining quickstart templates for different types of projects using a (very) basic templating engine.
+## Allow for the creationand access of modules of sound processes (not available yet).
+::
+
+CLASSMETHODS::
+
+METHOD:: new
+Create a new instance of link::Classes/Cactus::
+
+ARGUMENT:: projectPath
+A string denoting the path of the project. 
+If the path exists link::Classes/Cactus:: 
+will load it. If it does not exist it will 
+create the initial structure.
+
+NOTE::
+If you don't provide a path a dialog will 
+open to allow you to manually designate a 
+path using the OS file manager.
+::
+
+returns:: A Cactus instance
+
+METHOD:: at
+A convenience global link::Classes/Dictionary::. It
+can be used to store any value but it also stores the 
+instance for every running project under the project name 
+(the project name is the name of its main folder).
+
+returns:: The contents at 'key'
+
+code::
+// For a project at folder /test
+Cactus("/test");
+Cactus.at['test']; // returns the instance 
+::
+
+INSTANCEMETHODS::
+
+METHOD:: restart
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: clearBuffers
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: at
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: loadBuffers
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: projectName
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: buf
+(describe method here)
+
+ARGUMENT:: name
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: bufnums
+(describe method here)
+
+ARGUMENT:: name
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: projectPath
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: openProjectDir
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: buffers
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: runTemplate
+(describe method here)
+
+ARGUMENT:: templateName
+(describe argument here)
+
+ARGUMENT:: options
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+EXAMPLES::
+
+code::
+(some example code)
+::
+
