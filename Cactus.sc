@@ -144,6 +144,7 @@ Cactus { var <projectPath;
       this.storeBuffersAsCollection(folderName, soundFile);
       this.storeBufferByName(soundFile, folderName, soundFileName);
     };
+    this.fixBuffersRootDirEntry;
   }
 
   collectIntoBuffers { arg path; var list;
@@ -175,7 +176,13 @@ Cactus { var <projectPath;
         {result = item +/+ result},
         {done = true}
       )};
+     result = "" +/+ result;
     ^result.withoutTrailingSlash;
+  }
+
+  fixBuffersRootDirEntry {
+    buffers.put("/", buffers.at(""));
+    buffers.removeAt("");
   }
 
   // Helper Methods
