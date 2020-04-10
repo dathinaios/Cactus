@@ -8,7 +8,6 @@ Modules { var <modulesPath, templateManager;
 
   init {
     this.runModuleInits;
-    this.checkAndCreateDir(modulesPath, "Modules");
     this.initTemplateManager;
   }
 
@@ -51,15 +50,6 @@ Modules { var <modulesPath, templateManager;
 
   initTemplateManager {
     templateManager = CactusTemplateManager.new;
-  }
-
-  // Helper Methods
-
-  checkAndCreateDir { arg path, name;
-    if ( File.exists(path).not, {
-      File.mkdir(path);
-      ("created: " ++ path).postln;
-    },{( name ++ " Dir - √" ).postln});
   }
 
   // Drafts
