@@ -14,7 +14,7 @@ Modules { var <modulesPath, templateManager;
 
   // Public
 
-  runModule { arg name, args; var path;
+  run { arg name, args; var path;
     path = modulesPath +/+ name +/+ "run.scd";
     path.load.valueWithEnvir(args);
   }
