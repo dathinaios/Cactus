@@ -72,9 +72,9 @@ CactusTemplateManager { var <>templatesDir;
   createBackupFileCopy { arg targetFilePath;
       File.copy(
         targetFilePath.standardizePath,
-        targetFilePath.standardizePath ++ "." ++ UniqueID.next ++ ".bkp");
-      ("A file named" + targetFilePath.basename + "was already there!").postln;
-      ("Renamed old file to" + targetFilePath.basename ++ ".bkp").postln;
+        targetFilePath.standardizePath.splitext[0] ++ "-" ++ Date.getDate.stamp ++ ".scd");
+      ("-> A file named" + targetFilePath.basename + "was already there!").postln;
+      "-> Renamed old file".postln;
   }
 
   parseTemplateFile { arg path, options;
