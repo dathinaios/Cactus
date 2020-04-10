@@ -16,7 +16,7 @@ Modules { var <modulesPath, templateManager;
 
   run { arg name, args; var path;
     path = modulesPath +/+ name +/+ "run.scd";
-    path.load.valueWithEnvir(args);
+    ^path.load.valueWithEnvir(args);
   }
 
   restart {
@@ -39,6 +39,12 @@ Modules { var <modulesPath, templateManager;
         i.fullPath.load.value;
       };
     });
+  }
+
+  hack { arg name;
+  }
+
+  gui {
   }
 
   // Private
