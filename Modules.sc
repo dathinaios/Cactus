@@ -70,8 +70,7 @@ Modules { var <modulesPath, templateManager;
 
     gui = EZListView.new(nil,200@200, "");
     gui.font = Font("Monaco", 11);
-    infoWin = Window(
-      "Info",
+    infoWin = Window( "Info",
       Rect(
         gui.window.bounds.left+gui.window.bounds.width,
         gui.window.bounds.top-200, 400, 400),
@@ -79,7 +78,6 @@ Modules { var <modulesPath, templateManager;
       ).front;
       infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
       infoGUI.font = Font("Monaco", 11);
-
       path.folders.do{
         arg item; var name, info;
         name = item.folderName;
@@ -91,17 +89,16 @@ Modules { var <modulesPath, templateManager;
           }
         );
       };
-
       gui.valueAction = 0;
-    }
-
-    // gatherBuffersFromModules { arg bufferArray;
-    //   PathName(modulesPath).folders.do{
-    //     arg folder; var newBufs;
-    //     newBufs = this.collectIntoBuffers(folder.fullPath ++ "/buffers");
-    //     bufferArray = bufferArray.addAll(newBufs);
-    //   };
-    //   ^bufferArray;
-    // }
-
   }
+
+  // gatherBuffersFromModules { arg bufferArray;
+  //   PathName(modulesPath).folders.do{
+  //     arg folder; var newBufs;
+  //     newBufs = this.collectIntoBuffers(folder.fullPath ++ "/buffers");
+  //     bufferArray = bufferArray.addAll(newBufs);
+  //   };
+  //   ^bufferArray;
+  // }
+
+}
