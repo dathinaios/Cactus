@@ -6,26 +6,39 @@ Modules { var <modulesPath, templateManager;
     ^super.newCopyArgs(modulesPath).init;
   }
 
-  init {
-    this.runModuleInits;
-  }
-
   // Public
+
+  runInits { var path;
+    path = PathName(modulesPath);
+    path.folders.do({ arg folder; var initPath;
+      initPath = PathName(folder.fullPath++"/init");
+      initPath.files.do{ arg i;
+        i.fullPath.load.value;
+      };
+    });
+  }
 
   run { arg name, args; var path;
     path = modulesPath +/+ name +/+ "run.scd";
     ^path.load.valueWithEnvir(args);
   }
 
-  restart {
-    this.runModuleCleanups;
-    this.runModuleInits;
-  }
-
   getInfo { arg name, key; var path, yamlDictionary;
     path = modulesPath +/+ name +/+ "info.yaml";
     yamlDictionary = path.standardizePath.parseYAMLFile;
     ^yamlDictionary.at(key.asString);
+  }
+
+  runCleanups { var path;
+    path = PathName(modulesPath);
+    path.folders.do({ arg folder; var initPath;
+      (folder.fullPath++"cleanup.scd").load;
+    });
+  }
+
+  restart {
+    this.runCleanups;
+    this.runInits;
   }
 
   hack { arg name;
@@ -35,21 +48,8 @@ Modules { var <modulesPath, templateManager;
 
   // Private
 
-  runModuleCleanups { var path;
-    path = PathName(modulesPath);
-    path.folders.do({ arg folder; var initPath;
-      (folder.fullPath++"cleanup.scd").load;
-    });
-  }
-
-  runModuleInits { var path;
-    path = PathName(modulesPath);
-    path.folders.do({ arg folder; var initPath;
-      initPath = PathName(folder.fullPath++"/init");
-      initPath.files.do{ arg i;
-        i.fullPath.load.value;
-      };
-    });
+  init {
+    this.runInits;
   }
 
   // Drafts
