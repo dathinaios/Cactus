@@ -22,6 +22,19 @@ Modules { var <modulesPath, templateManager;
     this.runModuleInits;
   }
 
+  getInfo { arg name, key; var path, yamlDictionary;
+    path = modulesPath +/+ name +/+ "info.yaml";
+    yamlDictionary = path.standardizePath.parseYAMLFile;
+    ^yamlDictionary.at(key.asString);
+  }
+
+  hack { arg name;
+  }
+
+  gui { }
+
+  // Private
+
   runModuleCleanups { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
@@ -39,30 +52,7 @@ Modules { var <modulesPath, templateManager;
     });
   }
 
-  getInfo { arg name, key; var path, yamlDictionary;
-    path = modulesPath +/+ name +/+ "info.yaml";
-    yamlDictionary = path.standardizePath.parseYAMLFile;
-    ^yamlDictionary.at(key.asString);
-  }
-
-  hack { arg name;
-  }
-
-  gui { }
-
-  // Private
-
-  loadInfoFromYAML {
-  }
-
   // Drafts
-
-  listModules { var path;
-    path = PathName(modulesPath);
-    this.printNewLine;
-    path.folders.do{ arg i; i.folderName.postln};
-    this.printNewLine;
-  }
 
   listModulesGUI {
     this.listGUI(modulesPath);
@@ -70,7 +60,6 @@ Modules { var <modulesPath, templateManager;
 
   listGUI { arg path, action; var gui, infoGUI, infoWin;
     path = PathName(path);
-
     gui = EZListView.new(nil,200@200, "");
     gui.font = Font("Monaco", 11);
     infoWin = Window( "Info",
@@ -80,15 +69,18 @@ Modules { var <modulesPath, templateManager;
         scroll: true
       ).front;
       infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
-      infoGUI.font = Font("Monaco", 11);
-      path.folders.do{
-        arg item; var name, info;
+      infoGUI.font = Font("Monaco", 14);
+      path.folders.do{ arg item; var name, info;
         name = item.folderName;
-        File.use(
-          path.fullPath ++ "/" ++ item.folderName ++ "/" ++ "readme.txt", "r",
+        gui.addItem(
+          this.getInfo(name, \name),
           {
-            arg f; info = f.readAllString;
-            gui.addItem(name, { infoGUI.string = info });
+            infoGUI.string =
+            this.getInfo(name, \name) + "\n\n" +
+            this.getInfo(name, \description) + "\n\n" +
+            "Created by: " + this.getInfo(name, \author) + "\n\n" +
+            "Tags: " + this.getInfo(name, \tags)
+
           }
         );
       };
