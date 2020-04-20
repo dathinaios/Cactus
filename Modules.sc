@@ -8,7 +8,6 @@ Modules { var <modulesPath, templateManager;
 
   init {
     this.runModuleInits;
-    this.initTemplateManager;
   }
 
   // Public
@@ -40,16 +39,20 @@ Modules { var <modulesPath, templateManager;
     });
   }
 
+  getInfo { arg name, key; var path, yamlDictionary;
+    path = modulesPath +/+ name +/+ "info.yaml";
+    yamlDictionary = path.standardizePath.parseYAMLFile;
+    ^yamlDictionary.at(key.asString);
+  }
+
   hack { arg name;
   }
 
-  gui {
-  }
+  gui { }
 
   // Private
 
-  initTemplateManager {
-    templateManager = CactusTemplateManager.new;
+  loadInfoFromYAML {
   }
 
   // Drafts
@@ -91,14 +94,5 @@ Modules { var <modulesPath, templateManager;
       };
       gui.valueAction = 0;
   }
-
-  // gatherBuffersFromModules { arg bufferArray;
-  //   PathName(modulesPath).folders.do{
-  //     arg folder; var newBufs;
-  //     newBufs = this.collectIntoBuffers(folder.fullPath ++ "/buffers");
-  //     bufferArray = bufferArray.addAll(newBufs);
-  //   };
-  //   ^bufferArray;
-  // }
 
 }
