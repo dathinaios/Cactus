@@ -18,8 +18,9 @@ ProjectControlsCactus : AbstractGUIComponentCactus {
     };
 
     label = StaticText(window, Rect( width: 180, height: 20));
-    label.font_(options.font);
-    label.stringColor_(Color.fromHexString("#A0A0A0"););
+    label.align_(\center);
+    label.font_(options.projectNameFont);
+    label.stringColor_(options.projectNameColor);
     label.string_("");
   }
 

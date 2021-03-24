@@ -109,12 +109,16 @@ CactusGUI {
   /* -------------- */
 
   createProjectControls {
-    projectControls = ProjectControlsCactus(window, options: ());
+    projectControls = ProjectControlsCactus(
+      window, 
+      options: (
+        projectNameFont: Font("Lucida Grande", 15),
+        projectNameColor: Color.green
+      )
+    );
     windowHeight = windowHeight + projectControls.windowHeight;
-    projectControls.openButton.action = {
-      cactus.openProjectDir;
-    };
-    projectControls.label.string_(cactus.projectName);
+    projectControls.openButton.action = { cactus.openProjectDir };
+    projectControls.label.string_(cactus.projectName.asString.toUpper);
   }
 
   /* Handle Events from Dependants */
