@@ -103,6 +103,7 @@ Cactus { var <projectPath;
   }
 
   clear {
+    this.clearBuffers;
     this.runCleanUp;
   }
 
