@@ -60,7 +60,7 @@ Cactus { var <projectPath;
     buffers = Dictionary.new;
     at = Dictionary.new;
     projectPath = projectPath.standardizePath;
-    this.initProjectPath;
+    this.initWithPath;
     this.initTemplateManager;
   }
 
@@ -88,24 +88,6 @@ Cactus { var <projectPath;
     Cactus.at[\instance] = this;
   }
 
-  initProjectPath {
-    if(projectPath.isNil,
-      {
-        FileDialog(
-          okFunc: { arg path;
-            projectPath = path;
-            this.initWithPath;
-            this.openProjectDir;
-          },
-          fileMode: 2,
-          stripResult: true,
-          acceptMode: 1
-        );
-      },
-      { this.initWithPath }
-    );
-  }
-
   initTemplateManager {
     templateManager = CactusTemplateManager.new;
   }
@@ -118,6 +100,10 @@ Cactus { var <projectPath;
   runCleanUp {
     this.postCleanupInfo;
     cleanupPath.load.value;
+  }
+
+  clear {
+    this.runCleanUp;
   }
 
   runUserInit { var path;

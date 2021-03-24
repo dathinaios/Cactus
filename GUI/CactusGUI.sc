@@ -77,7 +77,7 @@ CactusGUI {
     window.background_(Color.fromHexString("#282828"));
     window.onClose = {
       serverWindow.clear;
-      // cactus.removeDependant(this);
+      cactus.clear;
       active = false;
     };
   }
