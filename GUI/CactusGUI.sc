@@ -3,7 +3,7 @@ CactusGUI {
 
   var cactus, options;
   var <window, name;
-  var <serverWindow;
+  var <projectControls, serverWindow;
   var <windowHeight = 0, font, titleFontSize, marginTop, <active = false;
 
   *new { arg cactus, options = ();
@@ -17,7 +17,7 @@ CactusGUI {
       this.setDefaultOptions;
       this.initStyleVariables;
       this.createMainWindow;
-      if(options.serverControls) { this.createServerControls };
+      this.createProjectControls;
       if(options.shortcuts) { this.registerShortcuts };
 
       active = true;
@@ -29,9 +29,9 @@ CactusGUI {
 
   setDefaultOptions {
     options.placeholderOption ?? { options.placeholderOption = "testing" };
-    options.left ?? { options.left = GUI.window.screenBounds.width - 282 };
-    options.top ?? { options.top = GUI.window.screenBounds.height - 330 };
-    options.serverControls ?? { options.serverControls = true };
+    options.left ?? { options.left = GUI.window.screenBounds.width*0.5 - 141 };
+    options.top ?? { options.top = GUI.window.screenBounds.height*0.5 + 165 };
+    options.serverControls ?? { options.serverControls = false };
     options.shortcuts ?? { options.shortcuts = true };
   }
 
@@ -69,11 +69,16 @@ CactusGUI {
     ^label;
   }
 
-  /* -------- */
+  /* -------------- */
+  // GUI Components //
+  /* -------------- */
 
-  createServerControls {
-    serverWindow = ServerWindowCactus(window, options: (font: Font(font, titleFontSize)));
-    windowHeight = windowHeight + serverWindow.windowHeight;
+  createProjectControls {
+    projectControls = ProjectControlsCactus(window, options: ());
+    windowHeight = windowHeight + projectControls.windowHeight;
+    projectControls.openButton.action = {
+      projectControls.label.string_(cactus.projectName);
+    };
   }
 
   /* Handle Events from Dependants */
