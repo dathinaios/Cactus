@@ -41,10 +41,15 @@ Modules { var <modulesPath, templateManager;
     this.runInits;
   }
 
-  hack { arg name;
+  localBrowseGUI {
+    this.listGUI(modulesPath);
   }
 
-  gui { }
+  globalBrowseGUI {
+  }
+
+  hack { arg name;
+  }
 
   // Private
 
@@ -53,10 +58,6 @@ Modules { var <modulesPath, templateManager;
   }
 
   // Drafts
-
-  listModulesGUI {
-    this.listGUI(modulesPath);
-  }
 
   listGUI { arg path, action; var gui, infoGUI, infoWin;
     path = PathName(path);
