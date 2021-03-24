@@ -1,13 +1,24 @@
 
 CactusGUI {
 
-  var cactus, options;
+  var options;
+  var <cactus;
   var <window, name;
   var <projectControls, serverWindow;
   var <windowHeight = 0, font, titleFontSize, marginTop, <active = false;
 
-  *new { arg cactus, options = ();
-    ^super.newCopyArgs(cactus, options).init;
+  *new { arg options = ();
+    ^super.newCopyArgs(options).initDialog;
+  }
+
+  initDialog {
+    this.popUpWarning(
+      string: "Would you like to open or create a project?",
+      action1: { this.openProjectDialog },
+      action2: { this.createProjectDialog },
+      text1: "Open",
+      text2: "Create"
+    );
   }
 
   init {
@@ -25,6 +36,30 @@ CactusGUI {
       window.bounds = window.bounds.height_(windowHeight + 10);
       window.front;
     }
+  }
+
+  openProjectDialog {
+      FileDialog(
+        okFunc: { arg path;
+          cactus = Cactus(path);
+          this.init;
+        },
+        fileMode: 2,
+        stripResult: true,
+        acceptMode: 0
+      );
+  }
+
+  createProjectDialog {
+      FileDialog(
+        okFunc: { arg path;
+          cactus = Cactus(path);
+          this.init;
+        },
+        fileMode: 2,
+        stripResult: true,
+        acceptMode: 1
+      );
   }
 
   setDefaultOptions {
@@ -77,8 +112,9 @@ CactusGUI {
     projectControls = ProjectControlsCactus(window, options: ());
     windowHeight = windowHeight + projectControls.windowHeight;
     projectControls.openButton.action = {
-      projectControls.label.string_(cactus.projectName);
+      cactus.openProjectDir;
     };
+    projectControls.label.string_(cactus.projectName);
   }
 
   /* Handle Events from Dependants */
@@ -89,4 +125,43 @@ CactusGUI {
     {"this.setCurrent(theChanged)"}
   }
 
+  popUpWarning { 
+
+    arg string="Are your sure?", action1, action2, text1="Yes", text2 = "No"; 
+    var dialog; 
+    var buttonColor, destructiveButtonColor, backgroundColor, listsColor, 
+        buttonTextColor, destructiveButtonTextColor, textBoxColor;
+
+    buttonColor = Color.new255(106,106,126);
+    buttonTextColor = Color.white;
+    destructiveButtonColor = Color.new255(106,106,126);
+    destructiveButtonTextColor = Color.white;
+    backgroundColor = Gradient(Color.new255(168, 183, 194),Color.new255(39, 43, 52),  \v, 1280);
+    listsColor = Gradient(Color.white, Color.new255(168,173,194), \v, 1280);
+    textBoxColor = Color.new255(168,173,194);
+
+    dialog = Window.new("", Rect(
+        GUI.window.screenBounds.width*0.5, 
+        GUI.window.screenBounds.height*0.5, 280, 112), 
+        border: false).front;
+
+    StaticText.new(dialog,Rect(30, 10, 220, 50))
+    .string_(string)
+    .align_(\left);
+
+    Button.new(dialog,Rect(30, 70, 100, 20))
+    .states_([ [text1, destructiveButtonTextColor, destructiveButtonColor] ])
+    .action_{|v| 
+      action1.value; 
+      dialog.close;
+    };
+
+    Button.new(dialog,Rect(150, 70, 100, 20))
+    .states_([ [text2, buttonTextColor, buttonColor] ])
+    .action_{|v| 
+      action2.value; 
+      dialog.close;
+    };
+
+  }
 }

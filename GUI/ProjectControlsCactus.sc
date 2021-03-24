@@ -11,7 +11,7 @@ ProjectControlsCactus : AbstractGUIComponentCactus {
   createServerControls {
     // this.createLabel("Main Controls").align_(\left);
     openButton = Button(window, Rect(width: 80, height: 20) );
-    openButton.states = [["Open/Create", Color.white, Color.grey]];
+    openButton.states = [["Open Dir", Color.white, Color.grey]];
     openButton.canFocus = false;
     openButton.font_(options.font);
     openButton.action = {
