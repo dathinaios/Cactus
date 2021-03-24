@@ -82,7 +82,7 @@ CactusGUI {
     window.background_(Color.fromHexString("#282828"));
     window.onClose = {
       serverWindow.clear;
-      cactus.removeDependant(this);
+      // cactus.removeDependant(this);
       active = false;
     };
   }
@@ -113,21 +113,21 @@ CactusGUI {
       window, 
       options: (
         projectNameFont: Font("Lucida Grande", 15),
-        projectNameColor: Color.green
+        projectNameColor: Color.white
       )
     );
     windowHeight = windowHeight + projectControls.windowHeight;
     projectControls.openButton.action = { cactus.openProjectDir };
-    projectControls.label.string_(cactus.projectName.asString.toUpper);
+    projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
   }
 
   /* Handle Events from Dependants */
 
-  update { arg theChanged, message;
-    switch (message)
-    {\somethingFromDependants}
-    {"this.setCurrent(theChanged)"}
-  }
+  // update { arg theChanged, message;
+  //   switch (message)
+  //   {\somethingFromDependants}
+  //   {"this.setCurrent(theChanged)"}
+  // }
 
   popUpWarning { 
 
