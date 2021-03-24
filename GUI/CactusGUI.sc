@@ -1,64 +1,59 @@
 
 CactusGUI {
 
-  var options;
+  var path, options;
   var <cactus;
   var <window, name;
   var <projectControls, serverWindow;
   var <windowHeight = 0, font, titleFontSize, marginTop, <active = false;
 
-  *new { arg options = ();
-    ^super.newCopyArgs(options).initDialog;
+  *new { arg path, options = ();
+    ^super.newCopyArgs(path, options).init;
   }
 
-  initDialog {
-    this.popUpWarning(
-      string: "Would you like to open or create a project?",
-      action1: { this.openProjectDialog },
-      action2: { this.createProjectDialog },
-      text1: "Open",
-      text2: "Create"
+
+  init {
+    if (path.isNil, {
+      this.popUpWarning(
+        string: "Would you like to open or create a project?",
+        action1: { this.initDialog(0) },
+        action2: { this.initDialog(1) },
+        text1: "Open",
+        text2: "Create")
+      }, 
+      {
+        cactus = Cactus(path);
+        this.run;
+      }
     );
   }
 
-  init {
-    Server.default.waitForBoot{
-      name = "Cactus";
+  run {
+    name = "Cactus";
 
-      this.setDefaultOptions;
-      this.initStyleVariables;
-      this.createMainWindow;
-      this.createProjectControls;
-      if(options.shortcuts) { this.registerShortcuts };
+    this.setDefaultOptions;
+    this.initStyleVariables;
+    this.createMainWindow;
+    this.createProjectControls;
+    if(options.shortcuts) { this.registerShortcuts };
 
-      active = true;
-      window.bounds.height = windowHeight;
-      window.bounds = window.bounds.height_(windowHeight + 10);
-      window.front;
-    }
+    active = true;
+    window.bounds.height = windowHeight;
+    window.bounds = window.bounds.height_(windowHeight + 10);
+    window.front;
   }
 
-  openProjectDialog {
+  initDialog { arg mode = 0;
       FileDialog(
         okFunc: { arg path;
           cactus = Cactus(path);
-          this.init;
+          this.run;
+          ("You could also open this project by running: \n"++
+          "c = CactusGUI(\""++path++"\");").postln;
         },
         fileMode: 2,
         stripResult: true,
-        acceptMode: 0
-      );
-  }
-
-  createProjectDialog {
-      FileDialog(
-        okFunc: { arg path;
-          cactus = Cactus(path);
-          this.init;
-        },
-        fileMode: 2,
-        stripResult: true,
-        acceptMode: 1
+        acceptMode: mode 
       );
   }
 
@@ -120,14 +115,6 @@ CactusGUI {
     projectControls.openButton.action = { cactus.openProjectDir };
     projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
   }
-
-  /* Handle Events from Dependants */
-
-  // update { arg theChanged, message;
-  //   switch (message)
-  //   {\somethingFromDependants}
-  //   {"this.setCurrent(theChanged)"}
-  // }
 
   popUpWarning { 
 
