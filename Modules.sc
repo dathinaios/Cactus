@@ -3,7 +3,12 @@ Modules { var <modulesPath, globalPath, templateManager;
 
   *new { arg modulesPath;
     modulesPath = modulesPath.standardizePath;
-    ^super.newCopyArgs(modulesPath).init;
+    if(File.exists(modulesPath), {
+      ^super.newCopyArgs(modulesPath).init;
+    },{
+      "The path used does not exist".error;
+      ^nil
+    });
   }
 
   // Public
@@ -50,7 +55,7 @@ Modules { var <modulesPath, globalPath, templateManager;
     this.browseFromPath(globalPath);
   }
 
-  list {
+  list { // assumes that we are pointing at a folder with valid modules
     this.browseFromPath(modulesPath);
   }
 
@@ -75,31 +80,44 @@ Modules { var <modulesPath, globalPath, templateManager;
     ("git -C" + globalPath.escapeChar($ ) + "pull").unixCmd;
   }
 
-  browseFromPath { arg path; 
-    var window, gui, textView;
-    var windowRect;
+  browseFromPath { arg path;
+    var window, listView, textView;
+    var windowRect, previewButton, installButton, hackButton;
 
     path = PathName(path);
 
     windowRect = Rect(
-      GUI.window.screenBounds.width*0.5, 
-      GUI.window.screenBounds.height*0.5, 
-      815, 400);
+      GUI.window.screenBounds.width*0.5,
+      GUI.window.screenBounds.height*0.5,
+      815, 453);
     window = Window.new( "Browser", windowRect, resizable: false).front;
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
     // window.onClose = { "placeholder" };
 
-    gui = EZListView.new(window,200@400);
-    gui.font = Font("Monaco", 14);
+    listView = EZListView.new(window,200@400);
+    listView.font = Font("Monaco", 14);
     textView = TextView(window, 600@400).background_(Color.white);
     textView.editable = false;
-    // textView.font = Font("Monaco", 14);
+
+    StaticText(window, Rect(width: 409, height: 40));
+    previewButton = Button(window, Rect(width: 128, height: 40) );
+    previewButton.states = [["Preview", Color.white, Color.grey]];
+    previewButton.canFocus = false;
+
+    installButton = Button(window, Rect(width: 128, height: 40) );
+    installButton.states = [["install", Color.white, Color.grey]];
+    installButton.canFocus = false;
+
+    hackButton = Button(window, Rect(width: 128, height: 40) );
+    hackButton.states = [["⚡️ Hack ⚡️", Color.white, Color.grey]];
+    hackButton.canFocus = false;
+
     path.folders.do{ arg item; var name;
       name = item.folderName;
-      gui.addItem(
+      listView.addItem(
         this.getInfo(name, \name),
-        { 
+        {
           var title, body, credits, tags;
           title = "🍃 " + this.getInfo(name, \name) + "\n";
           body = "\n" + this.getInfo(name, \description).stripWhiteSpace + "\n\n";
@@ -116,10 +134,15 @@ Modules { var <modulesPath, globalPath, templateManager;
 
           textView.setFont(Font("Palatino", 16), title.size + body.size -2 , 10000 );
           textView.setStringColor( Color.grey, title.size + body.size -2, 10000);
+
+          previewButton.action = { "-> not implemented".postln; };
+          installButton.action = {this.installModule(name, modulesPath)};
+          hackButton.action = { "-> not implemented".postln; };
         }
       );
     };
-    gui.valueAction = 0;
+
+    listView.valueAction = 0;
   }
 
   installModule{ arg name, target;
