@@ -3,7 +3,7 @@ ProjectControlsCactus : AbstractGUIComponentCactus {
 
   var serverInfoRoutine;
   var <openButton, <label, <restartButton,
-      <modulesButton, <buffersButton, <helpButton;
+      <buffersButton, <modulesButton, <browseButton;
 
   createComponent {
     this.createServerControls;
@@ -34,20 +34,20 @@ ProjectControlsCactus : AbstractGUIComponentCactus {
     restartButton.canFocus = false;
     restartButton.font_(options.font);
 
-    modulesButton = Button(window, Rect(width: 59, height: 20) );
-    modulesButton.states = [["Modules", Color.white, Color.grey]];
-    modulesButton.canFocus = false;
-    modulesButton.font_(options.font);
-
     buffersButton = Button(window, Rect(width: 59, height: 20) );
     buffersButton.states = [["Buffers", Color.white, Color.grey]];
     buffersButton.canFocus = false;
     buffersButton.font_(options.font);
 
-    helpButton = Button(window, Rect(width: 59, height: 20) );
-    helpButton.states = [["Help", Color.white, Color.grey]];
-    helpButton.canFocus = false;
-    helpButton.font_(options.font);
+    modulesButton = Button(window, Rect(width: 59, height: 20) );
+    modulesButton.states = [["Modules", Color.white, Color.grey]];
+    modulesButton.canFocus = false;
+    modulesButton.font_(options.font);
+
+    browseButton = Button(window, Rect(width: 59, height: 20) );
+    browseButton.states = [["Browse", Color.white, Color.grey]];
+    browseButton.canFocus = false;
+    browseButton.font_(options.font);
 
   }
 

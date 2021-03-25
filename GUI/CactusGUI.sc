@@ -107,16 +107,15 @@ CactusGUI {
       window,
       options: (
         projectNameFont: Font("Lucida Grande", 15),
-        projectNameColor: Color.white
-      )
+        projectNameColor: Color.white )
     );
     windowHeight = windowHeight + projectControls.windowHeight;
     projectControls.openButton.action = { cactus.openProjectDir };
     projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
     projectControls.restartButton.action = { cactus.restart };
-    projectControls.modulesButton.action = { modules.listGUI };
     projectControls.buffersButton.action = { cactus.listBuffers };
-    projectControls.helpButton.action = { Cactus.openHelpFile };
+    projectControls.modulesButton.action = { cactus.modules };
+    projectControls.browseButton.action = { modules.browse };
   }
 
   popUpWarning {

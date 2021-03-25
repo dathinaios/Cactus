@@ -23,8 +23,8 @@ Modules { var <modulesPath, globalPath, templateManager;
     ^path.load.valueWithEnvir(args);
   }
 
-  getInfo { arg name, key; var path, yamlDictionary;
-    path = modulesPath +/+ name +/+ "info.yaml";
+  getInfo { arg name, key, path = globalPath; var yamlDictionary;
+    path = path +/+ name +/+ "info.yaml";
     yamlDictionary = path.standardizePath.parseYAMLFile;
     ^yamlDictionary.at(key.asString);
   }
@@ -41,20 +41,13 @@ Modules { var <modulesPath, globalPath, templateManager;
     this.runInits;
   }
 
-  localBrowseGUI {
-    this.listGUI(modulesPath);
-  }
-
-  globalBrowseGUI {
-  }
-
   hack { arg name;
   }
 
   // Private
 
   init {
-    globalPath = Platform.userAppSupportDir.escapeChar($ ) ++ "/CactusModules";
+    globalPath = Platform.userAppSupportDir ++ "/CactusModules";
     this.runInits;
   }
 
@@ -62,11 +55,11 @@ Modules { var <modulesPath, globalPath, templateManager;
 
   installGlobal {
     ("git clone https://github.com/dathinaios/CactusModules.git" 
-      + globalPath).unixCmd;
+      + globalPath.escapeChar($ )).unixCmd;
   }
 
   updateGlobal {
-    ("git -C" + globalPath + "pull").unixCmd;
+    ("git -C" + globalPath.escapeChar($ ) + "pull").unixCmd;
   }
 
   browse { arg action; var path, gui, infoGUI, infoWin;
@@ -91,7 +84,6 @@ Modules { var <modulesPath, globalPath, templateManager;
             this.getInfo(name, \description) + "\n\n" +
             "Created by: " + this.getInfo(name, \author) + "\n\n" +
             "Tags: " + this.getInfo(name, \tags)
-
           }
         );
       };
