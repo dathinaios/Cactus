@@ -59,9 +59,6 @@ Modules { var <modulesPath, globalPath, templateManager;
     this.browseFromPath(modulesPath);
   }
 
-  hack { arg name;
-  }
-
   // Private
 
   init {
@@ -137,7 +134,7 @@ Modules { var <modulesPath, globalPath, templateManager;
 
           previewButton.action = { "-> not implemented".postln; };
           installButton.action = {this.installModule(name, modulesPath)};
-          hackButton.action = { "-> not implemented".postln; };
+          hackButton.action = {this.hackModule(name, modulesPath)};
         }
       );
     };
@@ -145,20 +142,43 @@ Modules { var <modulesPath, globalPath, templateManager;
     listView.valueAction = 0;
   }
 
-  installModule{ arg name, target;
-    if (File.exists(globalPath +/+ name.asString), {
+  installModule{ arg name, target, newName;
+
+    if (File.exists(globalPath +/+ name.asString) or:{ newName.notNil }, {
       var sourcePath, targetPath;
       sourcePath = this.getModuleGlobalPath(name);
       targetPath = target +/+ name.asString;
+      if(newName.notNil){ targetPath = target +/+ newName.asString; };
       if (File.exists(targetPath).not, {
         ("cp -R" + sourcePath.escapeChar($ ) + targetPath.escapeChar($ )).unixCmd;
-        ("Module" + name + "installed succesfully 👍").postln;
+        ("Module" + targetPath.basename + "created succesfully 👍").postln;
       }, {
         "You are already using a module with that name!".error;
       });
     },{
       "There is no module with that name in the global repo!".error;
     });
+  }
+
+  hackModule { arg name, target;
+    var dialog;
+    dialog = Window.new("", Rect(
+        GUI.window.screenBounds.width*0.5,
+        GUI.window.screenBounds.height*0.5, 230, 120),
+        border: true, resizable: false).front;
+
+    StaticText.new(dialog,Rect(5, 10, 220, 50))
+    .string_("Name your new module:")
+    .font_(Font("Palatino", 16))
+    .align_(\left);
+
+    TextField(dialog, Rect(5, 50, 220, 50))
+    .font_(Font("Palatino", 30))
+    .action_{ arg textField;
+      dialog.close;
+      this.installModule(name, target, newName: textField.string.asSymbol);
+    };
+
   }
 
 }
