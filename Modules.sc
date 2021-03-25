@@ -29,6 +29,11 @@ Modules { var <modulesPath, globalPath, templateManager;
     ^yamlDictionary.at(key.asString);
   }
 
+  getModuleGlobalPath {arg name; var path;
+    path = globalPath +/+ name;
+    ^path;
+  }
+
   runCleanups { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
@@ -98,11 +103,19 @@ Modules { var <modulesPath, globalPath, templateManager;
     gui.valueAction = 0;
   }
 
-  installModule{ arg target;
-    if (File.exists(globalPath), {
-      ("cp" + globalPath).postln;
+  installModule{ arg name, target;
+    if (File.exists(globalPath +/+ name.asString), {
+      var sourcePath, targetPath;
+      sourcePath = this.getModuleGlobalPath(name);
+      targetPath = target +/+ name.asString;
+      if (File.exists(targetPath).not, {
+        ("cp -R" + sourcePath.escapeChar($ ) + targetPath.escapeChar($ )).unixCmd;
+        ("Module" + name + "installed succesfully 👍").postln;
+      }, {
+        "You are already using a module with that name!".error;
+      });
     },{
-      "placeholder".postln;
+      "There is no module with that name in the global repo!".error;
     });
   }
 
