@@ -47,7 +47,8 @@ Cactus { var <projectPath;
       modules.list;
     },{
       File.mkdir(modulesPath);
-      // modules.installModule(\ModuleTemplate);
+      modules.installModule(\ModuleTemplate, modulesPath);
+      { 1.wait; modules.list; }.fork(AppClock);
     });
   }
 
