@@ -3,12 +3,7 @@ Modules { var <modulesPath, globalPath, templateManager;
 
   *new { arg modulesPath;
     modulesPath = modulesPath.standardizePath;
-    if(File.exists(modulesPath), {
-      ^super.newCopyArgs(modulesPath).init;
-    },{
-      "The path used does not exist".error;
-      ^nil
-    });
+    ^super.newCopyArgs(modulesPath).init;
   }
 
   // Public
@@ -52,7 +47,12 @@ Modules { var <modulesPath, globalPath, templateManager;
   }
 
   browse {
-    this.browseFromPath(globalPath);
+    if (File.exists(modulesPath), {
+      this.browseFromPath(globalPath);
+    },{
+      File.mkdir(modulesPath);
+      this.browseFromPath(globalPath);
+    });
   }
 
   list { // assumes that we are pointing at a folder with valid modules
