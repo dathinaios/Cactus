@@ -20,12 +20,14 @@ CactusGUI {
         text1: "Open",
         text2: "Create")
       },
-      { this.run; }
+      {
+        cactus = Cactus(path);
+        this.run;
+      }
     );
   }
 
   run {
-    cactus = Cactus(path);
     name = "Cactus";
     this.setDefaultOptions;
     this.initStyleVariables;
@@ -41,6 +43,7 @@ CactusGUI {
   initDialog { arg mode = 0;
       FileDialog(
         okFunc: { arg path;
+          cactus = Cactus(path);
           this.run;
           ("You could also open this project by running: \n"++
           "c = CactusGUI(\""++path++"\");").postln;
