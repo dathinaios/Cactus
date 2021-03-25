@@ -1,5 +1,5 @@
 
-Modules { var <modulesPath, templateManager;
+Modules { var <modulesPath, globalPath, templateManager;
 
   *new { arg modulesPath;
     modulesPath = modulesPath.standardizePath;
@@ -54,13 +54,23 @@ Modules { var <modulesPath, templateManager;
   // Private
 
   init {
+    globalPath = Platform.userAppSupportDir.escapeChar($ ) ++ "/CactusModules";
     this.runInits;
   }
 
-  // Drafts
+  // Manage CactusModules
 
-  listGUI { arg action; var path, gui, infoGUI, infoWin;
-    path = PathName(modulesPath);
+  installGlobal {
+    ("git clone https://github.com/dathinaios/CactusModules.git" 
+      + globalPath).unixCmd;
+  }
+
+  updateGlobal {
+    ("git -C" + globalPath + "pull").unixCmd;
+  }
+
+  browse { arg action; var path, gui, infoGUI, infoWin;
+    path = PathName(globalPath);
     gui = EZListView.new(nil,200@200, "");
     gui.font = Font("Monaco", 11);
     infoWin = Window( "Info",
