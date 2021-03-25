@@ -215,6 +215,17 @@ Cactus { var <projectPath;
     ^path.basename.splitext[0];
   }
 
+  listBuffers { arg list;
+    list = List.new;
+    buffers.keysDo{ arg key;
+      if(key != "/"){list = list.add(key)};
+    };
+    list.sort.do{ arg key;
+      if(key.findRegexp("/*/").size == 1){"-----------------".postln;};
+      key.postln;
+    };
+  }
+
 }
 
 + List {

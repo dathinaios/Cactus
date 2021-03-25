@@ -2,15 +2,14 @@
 CactusGUI {
 
   var path, options;
-  var <cactus;
+  var <cactus, <modules;
   var <window, name;
   var <projectControls, serverWindow;
-  var <windowHeight = 0, font, titleFontSize, marginTop, <active = false;
+  var <windowHeight = 0, windowWidth = 256, font, titleFontSize, marginTop, <active = false;
 
   *new { arg path, options = ();
     ^super.newCopyArgs(path, options).init;
   }
-
 
   init {
     if (path.isNil, {
@@ -20,9 +19,10 @@ CactusGUI {
         action2: { this.initDialog(1) },
         text1: "Open",
         text2: "Create")
-      }, 
+      },
       {
         cactus = Cactus(path);
+        modules = Modules("~/Develop/SuperCollider/cactus/modules");
         this.run;
       }
     );
@@ -30,13 +30,11 @@ CactusGUI {
 
   run {
     name = "Cactus";
-
     this.setDefaultOptions;
     this.initStyleVariables;
     this.createMainWindow;
     this.createProjectControls;
     if(options.shortcuts) { this.registerShortcuts };
-
     active = true;
     window.bounds.height = windowHeight;
     window.bounds = window.bounds.height_(windowHeight + 10);
@@ -47,13 +45,14 @@ CactusGUI {
       FileDialog(
         okFunc: { arg path;
           cactus = Cactus(path);
+          modules = Modules("~/Develop/SuperCollider/cactus/modules");
           this.run;
           ("You could also open this project by running: \n"++
           "c = CactusGUI(\""++path++"\");").postln;
         },
         fileMode: 2,
         stripResult: true,
-        acceptMode: mode 
+        acceptMode: mode
       );
   }
 
@@ -72,7 +71,7 @@ CactusGUI {
   }
 
   createMainWindow {
-    window = Window.new(name, Rect(options.left, options.top, 282, 330), resizable: false);
+    window = Window.new(name, Rect(options.left, options.top, windowWidth, 330), resizable: false);
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
     window.onClose = {
@@ -105,7 +104,7 @@ CactusGUI {
 
   createProjectControls {
     projectControls = ProjectControlsCactus(
-      window, 
+      window,
       options: (
         projectNameFont: Font("Lucida Grande", 15),
         projectNameColor: Color.white
@@ -114,13 +113,17 @@ CactusGUI {
     windowHeight = windowHeight + projectControls.windowHeight;
     projectControls.openButton.action = { cactus.openProjectDir };
     projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
+    projectControls.restartButton.action = { cactus.restart };
+    projectControls.modulesButton.action = { modules.listGUI };
+    projectControls.buffersButton.action = { cactus.listBuffers };
+    projectControls.helpButton.action = { Cactus.openHelpFile };
   }
 
-  popUpWarning { 
+  popUpWarning {
 
-    arg string="Are your sure?", action1, action2, text1="Yes", text2 = "No"; 
-    var dialog; 
-    var buttonColor, destructiveButtonColor, backgroundColor, listsColor, 
+    arg string="", action1, action2, text1="1", text2 = "2";
+    var dialog;
+    var buttonColor, destructiveButtonColor, backgroundColor, listsColor,
         buttonTextColor, destructiveButtonTextColor, textBoxColor;
 
     buttonColor = Color.new255(106,106,126);
@@ -132,8 +135,8 @@ CactusGUI {
     textBoxColor = Color.new255(168,173,194);
 
     dialog = Window.new("", Rect(
-        GUI.window.screenBounds.width*0.5, 
-        GUI.window.screenBounds.height*0.5, 280, 112), 
+        GUI.window.screenBounds.width*0.5,
+        GUI.window.screenBounds.height*0.5, 280, 112),
         border: false).front;
 
     StaticText.new(dialog,Rect(30, 10, 220, 50))
@@ -142,15 +145,15 @@ CactusGUI {
 
     Button.new(dialog,Rect(30, 70, 100, 20))
     .states_([ [text1, destructiveButtonTextColor, destructiveButtonColor] ])
-    .action_{|v| 
-      action1.value; 
+    .action_{|v|
+      action1.value;
       dialog.close;
     };
 
     Button.new(dialog,Rect(150, 70, 100, 20))
     .states_([ [text2, buttonTextColor, buttonColor] ])
-    .action_{|v| 
-      action2.value; 
+    .action_{|v|
+      action2.value;
       dialog.close;
     };
 

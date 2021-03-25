@@ -59,8 +59,8 @@ Modules { var <modulesPath, templateManager;
 
   // Drafts
 
-  listGUI { arg path, action; var gui, infoGUI, infoWin;
-    path = PathName(path);
+  listGUI { arg action; var path, gui, infoGUI, infoWin;
+    path = PathName(modulesPath);
     gui = EZListView.new(nil,200@200, "");
     gui.font = Font("Monaco", 11);
     infoWin = Window( "Info",
