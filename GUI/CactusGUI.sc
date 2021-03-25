@@ -20,15 +20,13 @@ CactusGUI {
         text1: "Open",
         text2: "Create")
       },
-      {
-        cactus = Cactus(path);
-        modules = Modules("~/Develop/SuperCollider/cactus/modules");
-        this.run;
-      }
+      { this.run; }
     );
   }
 
   run {
+    cactus = Cactus(path);
+    modules = Modules(cactus.projectPath +/+ "modules");
     name = "Cactus";
     this.setDefaultOptions;
     this.initStyleVariables;
@@ -44,8 +42,6 @@ CactusGUI {
   initDialog { arg mode = 0;
       FileDialog(
         okFunc: { arg path;
-          cactus = Cactus(path);
-          modules = Modules("~/Develop/SuperCollider/cactus/modules");
           this.run;
           ("You could also open this project by running: \n"++
           "c = CactusGUI(\""++path++"\");").postln;
@@ -114,7 +110,7 @@ CactusGUI {
     projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
     projectControls.restartButton.action = { cactus.restart };
     projectControls.buffersButton.action = { cactus.listBuffers };
-    projectControls.modulesButton.action = { cactus.modules };
+    projectControls.modulesButton.action = { modules.list };
     projectControls.browseButton.action = { modules.browse };
   }
 

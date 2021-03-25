@@ -41,6 +41,14 @@ Modules { var <modulesPath, globalPath, templateManager;
     this.runInits;
   }
 
+  browse {
+    this.browseFromPath(globalPath);
+  }
+
+  list {
+    this.browseFromPath(modulesPath);
+  }
+
   hack { arg name;
   }
 
@@ -62,8 +70,8 @@ Modules { var <modulesPath, globalPath, templateManager;
     ("git -C" + globalPath.escapeChar($ ) + "pull").unixCmd;
   }
 
-  browse { arg action; var path, gui, infoGUI, infoWin;
-    path = PathName(globalPath);
+  browseFromPath { arg path; var gui, infoGUI, infoWin;
+    path = PathName(path);
     gui = EZListView.new(nil,200@200, "");
     gui.font = Font("Monaco", 11);
     infoWin = Window( "Info",
@@ -72,22 +80,22 @@ Modules { var <modulesPath, globalPath, templateManager;
         gui.window.bounds.top-200, 400, 400),
         scroll: true
       ).front;
-      infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
-      infoGUI.font = Font("Monaco", 14);
-      path.folders.do{ arg item; var name, info;
-        name = item.folderName;
-        gui.addItem(
-          this.getInfo(name, \name),
-          {
-            infoGUI.string =
-            this.getInfo(name, \name) + "\n\n" +
-            this.getInfo(name, \description) + "\n\n" +
-            "Created by: " + this.getInfo(name, \author) + "\n\n" +
-            "Tags: " + this.getInfo(name, \tags)
-          }
-        );
-      };
-      gui.valueAction = 0;
+    infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
+    infoGUI.font = Font("Monaco", 14);
+    path.folders.do{ arg item; var name, info;
+      name = item.folderName;
+      gui.addItem(
+        this.getInfo(name, \name),
+        {
+          infoGUI.string =
+          this.getInfo(name, \name) + "\n\n" +
+          this.getInfo(name, \description) + "\n\n" +
+          "Created by: " + this.getInfo(name, \author) + "\n\n" +
+          "Tags: " + this.getInfo(name, \tags)
+        }
+      );
+    };
+    gui.valueAction = 0;
   }
 
 }
