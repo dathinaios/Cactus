@@ -2,7 +2,7 @@
 CactusGUI {
 
   var path, options;
-  var <cactus, <modules;
+  var <cactus;
   var <window, name;
   var <projectControls, serverWindow;
   var <windowHeight = 0, windowWidth = 256, font, titleFontSize, marginTop, <active = false;
@@ -26,7 +26,6 @@ CactusGUI {
 
   run {
     cactus = Cactus(path);
-    modules = Modules(cactus.projectPath +/+ "modules");
     name = "Cactus";
     this.setDefaultOptions;
     this.initStyleVariables;
@@ -110,8 +109,8 @@ CactusGUI {
     projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
     projectControls.restartButton.action = { cactus.restart };
     projectControls.buffersButton.action = { cactus.listBuffers };
-    projectControls.modulesButton.action = { modules.list };
-    projectControls.browseButton.action = { modules.browse };
+    projectControls.modulesButton.action = { cactus.browseModules };
+    projectControls.browseButton.action = { cactus.modules.browse };
   }
 
   popUpWarning {

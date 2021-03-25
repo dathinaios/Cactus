@@ -1,7 +1,7 @@
 
 Cactus { var <projectPath;
-         var <buffers, <projectName, <templateManager;
-         var <buffersPath, <initPath, <configPath, <cleanupPath;
+         var <buffers, <projectName, <templateManager, <modules;
+         var <buffersPath, <initPath, <configPath, <cleanupPath, <modulesPath;
          var <at;
          classvar <at;
 
@@ -42,6 +42,15 @@ Cactus { var <projectPath;
     SystemClock.sched(1, {this.restart});
   }
 
+  browseModules {
+    if (File.exists(modulesPath), {
+      modules.list;
+    },{
+      File.mkdir(modulesPath);
+      // modules.installModule(\ModuleTemplate);
+    });
+  }
+
   // Private
 
   returnCoreOptions { var options;
@@ -57,6 +66,7 @@ Cactus { var <projectPath;
   }
 
   init {
+    modules = Modules(projectPath +/+ "modules");
     buffers = Dictionary.new;
     at = Dictionary.new;
     projectPath = projectPath.standardizePath;
@@ -67,8 +77,9 @@ Cactus { var <projectPath;
   storeMainPathVariables {
     buffersPath = projectPath ++ "/buffers";
     initPath = projectPath ++ "/init";
-    configPath = projectPath   ++ "/config.scd";
-    cleanupPath = projectPath   ++ "/cleanup.scd";
+    configPath = projectPath ++ "/config.scd";
+    cleanupPath = projectPath ++ "/cleanup.scd";
+    modulesPath = projectPath ++ "/modules";
   }
 
   initWithPath {

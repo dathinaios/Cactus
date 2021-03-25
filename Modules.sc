@@ -98,4 +98,12 @@ Modules { var <modulesPath, globalPath, templateManager;
     gui.valueAction = 0;
   }
 
+  installModule{ arg target;
+    if (File.exists(globalPath), {
+      ("cp" + globalPath).postln;
+    },{
+      "placeholder".postln;
+    });
+  }
+
 }
