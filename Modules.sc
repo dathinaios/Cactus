@@ -113,13 +113,13 @@ Modules { var <modulesPath, globalPath, templateManager;
     path.folders.do{ arg item; var name;
       name = item.folderName;
       listView.addItem(
-        this.getInfo(name, \name),
+        this.getInfo(name, \name, path: modulesPath),
         {
           var title, body, credits, tags;
-          title = "🍃 " + this.getInfo(name, \name) + "\n";
-          body = "\n" + this.getInfo(name, \description).stripWhiteSpace + "\n\n";
-          credits = "Created by: " + this.getInfo(name, \author).stripWhiteSpace + "\n";
-          tags = "Tags: " + this.getInfo(name, \tags);
+          title = "🍃 " + this.getInfo(name, \name, path: modulesPath) + "\n";
+          body = "\n" + this.getInfo(name, \description, path: modulesPath).stripWhiteSpace + "\n\n";
+          credits = "Created by: " + this.getInfo(name, \author, path: modulesPath).stripWhiteSpace + "\n";
+          tags = "Tags: " + this.getInfo(name, \tags, path: modulesPath);
 
           textView.string = title + body + credits + tags;
 
