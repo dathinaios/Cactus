@@ -134,7 +134,7 @@ Modules { var <modulesPath, globalPath, templateManager;
 
           previewButton.action = { "-> not implemented".postln; };
           installButton.action = {this.installModule(name, modulesPath)};
-          hackButton.action = {this.hackModule(name, modulesPath)};
+          hackButton.action = {this.hackModule(name, modulesPath); window.close};
         }
       );
     };
@@ -151,7 +151,7 @@ Modules { var <modulesPath, globalPath, templateManager;
       if(newName.notNil){ targetPath = target +/+ newName.asString; };
       if (File.exists(targetPath).not, {
         ("cp -R" + sourcePath.escapeChar($ ) + targetPath.escapeChar($ )).unixCmd;
-        ("Module" + targetPath.basename + "created succesfully 👍").postln;
+        ("✅ Module" + targetPath.basename + "created succesfully.").postln;
       }, {
         "You are already using a module with that name!".error;
       });
