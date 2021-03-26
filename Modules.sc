@@ -16,7 +16,11 @@ Modules { var <modulesPath, globalPath, templateManager;
   }
 
   run { arg name, args; var path;
-    path = modulesPath +/+ name +/+ "run.scd";
+    if(args.global == true,
+      { path = globalPath },
+      { path = modulesPath });
+    path = path +/+ name +/+ "run.scd";
+    path.debug("path");
     ^path.load.valueWithEnvir(args);
   }
 
@@ -31,10 +35,6 @@ Modules { var <modulesPath, globalPath, templateManager;
     path.folders.do({ arg folder; var initPath;
       this.runCleanUp(folder);
     });
-  }
-
-  runCleanUp { arg folder;
-    (folder.fullPath++"cleanup.scd").load;
   }
 
   restart {
@@ -67,6 +67,10 @@ Modules { var <modulesPath, globalPath, templateManager;
     initPath.files.do{ arg i;
       i.fullPath.load.value;
     };
+  }
+
+  runCleanUp { arg folder;
+    (folder.fullPath++"cleanup.scd").load;
   }
 
   // Manage CactusModules
