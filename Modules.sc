@@ -20,7 +20,6 @@ Modules { var <modulesPath, globalPath, templateManager;
       { path = globalPath },
       { path = modulesPath });
     path = path +/+ name +/+ "run.scd";
-    path.debug("path");
     ^path.load.valueWithEnvir(args);
   }
 
@@ -194,7 +193,9 @@ Modules { var <modulesPath, globalPath, templateManager;
   previewModule { arg name, path;
     this.runInit(PathName(path +/+ name));
     this.getInfo(name, \preview, path: path).interpret.value(this);
-    { 5.wait; this.runCleanUp(PathName(path +/+ name ++ "/")) }.fork;
+    if(File.exists(path +/+ name ++ "/cleanup.scd")){
+      { 5.wait; this.runCleanUp(PathName(path +/+ name ++ "/")) }.fork;
+    };
   }
 
   //Drafts
