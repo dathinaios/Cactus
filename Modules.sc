@@ -122,8 +122,7 @@ Modules { var <modulesPath, globalPath, templateManager;
     path.folders.do{ arg item; var name;
       name = item.folderName;
       listView.addItem(
-        // this.getInfo(name, \name, path: path.fullPath),
-        name,
+        this.getInfo(name, \name, path: path.fullPath),
         {
           var title, body, example, credits, tags;
           title = "🍃 " + this.getInfo(name, \name, path: path.fullPath) + "\n";
@@ -170,11 +169,14 @@ Modules { var <modulesPath, globalPath, templateManager;
       if (File.exists(targetPath).not, {
         ("cp -R" + sourcePath.escapeChar($ ) + targetPath.escapeChar($ )).unixCmd;
         ("✅ Module" + targetPath.basename + "created succesfully.").postln;
+        if(newName.notNil){
+          this.replaceTitleWithNewName(name, newName, sourcePath, targetPath);
+        };
       }, {
         "You are already using a module with that name!".error;
       });
     },{
-      "There is no module with that name in either the local or the global repo!".error;
+      "There is no module with that name!".error;
     });
   }
 
@@ -196,7 +198,6 @@ Modules { var <modulesPath, globalPath, templateManager;
       dialog.close;
       this.installModule(name, target, newName: textField.string.asSymbol, source: source);
     };
-
   }
 
   previewModule { arg name, path;
@@ -207,4 +208,27 @@ Modules { var <modulesPath, globalPath, templateManager;
     };
   }
 
+  replaceTitleWithNewName { 
+    arg name, newName, sourcePath, targetPath; 
+    var sourceInfo, originalTitle, yamlDictionary;
+
+    sourceInfo = sourcePath +/+ "info.yaml";
+    // name.postln;
+    // newName.postln;
+    // sourcePath.postln;
+    // targetPath.postln;
+
+    yamlDictionary = sourceInfo.standardizePath.parseYAMLFile;
+    originalTitle = yamlDictionary.at(\name.asString);
+
+    File.use(sourceInfo, "r", {
+      arg file; var string;
+      string = file.readAllString;
+      string = string.replace(
+        "name: " + originalTitle.asString, 
+        "name: " + newName.asString);
+      ^string.postln;
+    });
+  }
 }
+// if(newName.notNil){().postln;};
