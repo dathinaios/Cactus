@@ -5,7 +5,7 @@ CactusGUI {
   var <cactus;
   var <window, name;
   var <projectControls, serverWindow;
-  var <windowHeight = 0, windowWidth = 256, font, titleFontSize, marginTop, <active = false;
+  var <windowHeight = 0, font, titleFontSize, marginTop, <active = false;
 
   *new { arg path, options = ();
     ^super.newCopyArgs(path, options).init;
@@ -69,7 +69,17 @@ CactusGUI {
   }
 
   createMainWindow {
-    window = Window.new(name, Rect(options.left, options.top, windowWidth, 330), resizable: false);
+    var winWidth, winHeight, windowRect;
+
+    winWidth = 256;
+    winHeight = 330;
+
+    windowRect = Rect(
+      GUI.window.screenBounds.width-winWidth*0.5,
+      GUI.window.screenBounds.height*0.5,
+      winWidth, winHeight);
+
+    window = Window.new(name, windowRect, resizable: false);
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
     window.onClose = {
@@ -122,6 +132,15 @@ CactusGUI {
     var dialog;
     var buttonColor, destructiveButtonColor, backgroundColor, listsColor,
         buttonTextColor, destructiveButtonTextColor, textBoxColor;
+    var winWidth, winHeight, windowRect;
+
+    winWidth = 280;
+    winHeight = windowHeight;
+
+    windowRect = Rect(
+      GUI.window.screenBounds.width-winWidth*0.5,
+      GUI.window.screenBounds.height-winHeight*0.5,
+      winWidth, winHeight);
 
     buttonColor = Color.new255(106,106,126);
     buttonTextColor = Color.white;
@@ -131,10 +150,7 @@ CactusGUI {
     listsColor = Gradient(Color.white, Color.new255(168,173,194), \v, 1280);
     textBoxColor = Color.new255(168,173,194);
 
-    dialog = Window.new("", Rect(
-        GUI.window.screenBounds.width*0.5,
-        GUI.window.screenBounds.height*0.5, 280, 112),
-        border: false).front;
+    dialog = Window.new("", windowRect, border: false).front;
 
     StaticText.new(dialog,Rect(30, 10, 220, 50))
     .string_(string)

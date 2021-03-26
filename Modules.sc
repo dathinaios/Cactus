@@ -78,15 +78,18 @@ Modules { var <modulesPath, globalPath, templateManager;
   }
 
   browseFromPath { arg path;
-    var currentModulesPath, window, listView, textView;
+    var window, listView, textView;
     var windowRect, previewButton, installButton, hackButton;
+    var winWidth, winHeight;
 
+    winWidth = 815;
+    winHeight = 453;
     path = PathName(path);
 
     windowRect = Rect(
-      GUI.window.screenBounds.width*0.5,
-      GUI.window.screenBounds.height*0.5,
-      815, 453);
+      GUI.window.screenBounds.width-winWidth*0.5,
+      GUI.window.screenBounds.height-winHeight*0.5,
+      winWidth, winHeight);
     window = Window.new( "Browser", windowRect, resizable: false).front;
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
