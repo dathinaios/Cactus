@@ -10,11 +10,8 @@ Modules { var <modulesPath, globalPath, templateManager;
 
   runInits { var path;
     path = PathName(modulesPath);
-    path.folders.do({ arg folder; var initPath;
-      initPath = PathName(folder.fullPath++"/init");
-      initPath.files.do{ arg i;
-        i.fullPath.load.value;
-      };
+    path.folders.do({ arg folder;
+      this.runInit(folder);
     });
   }
 
@@ -29,15 +26,19 @@ Modules { var <modulesPath, globalPath, templateManager;
     ^yamlDictionary.at(key.asString);
   }
 
-  runCleanups { var path;
+  runCleanUps { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
-      (folder.fullPath++"cleanup.scd").load;
+      this.runCleanUp(folder);
     });
   }
 
+  runCleanUp { arg folder;
+    (folder.fullPath++"cleanup.scd").load;
+  }
+
   restart {
-    this.runCleanups;
+    this.runCleanUps;
     this.runInits;
   }
 
@@ -59,6 +60,13 @@ Modules { var <modulesPath, globalPath, templateManager;
   init {
     globalPath = Platform.userAppSupportDir ++ "/CactusModules";
     this.runInits;
+  }
+
+  runInit{ arg folder; var initPath;
+    initPath = PathName(folder.fullPath++"/init");
+    initPath.files.do{ arg i;
+      i.fullPath.load.value;
+    };
   }
 
   // Manage CactusModules
@@ -131,7 +139,7 @@ Modules { var <modulesPath, globalPath, templateManager;
           textView.setFont(Font("Palatino", 16), title.size + body.size -2 , 10000 );
           textView.setStringColor( Color.grey, title.size + body.size -2, 10000);
 
-          previewButton.action = { "-> not implemented".postln; };
+          previewButton.action = {this.previewModule(name, path.fullPath)};
           installButton.action = {this.installModule(name, modulesPath)};
           hackButton.action = {this.hackModule(name, source: rawPath); window.close};
         }
@@ -177,6 +185,12 @@ Modules { var <modulesPath, globalPath, templateManager;
       this.installModule(name, target, newName: textField.string.asSymbol, source: source);
     };
 
+  }
+
+  previewModule { arg name, path;
+    this.runInit(PathName(path +/+ name));
+    this.getInfo(name, \preview, path: path).interpret.value(this);
+    { 5.wait; this.runCleanUp(PathName(path +/+ name ++ "/")) }.fork;
   }
 
   //Drafts
