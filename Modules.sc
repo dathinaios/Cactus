@@ -29,11 +29,6 @@ Modules { var <modulesPath, globalPath, templateManager;
     ^yamlDictionary.at(key.asString);
   }
 
-  getModuleGlobalPath {arg name; var path;
-    path = globalPath +/+ name;
-    ^path;
-  }
-
   runCleanups { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
@@ -80,7 +75,7 @@ Modules { var <modulesPath, globalPath, templateManager;
   browseFromPath { arg path;
     var window, listView, textView;
     var windowRect, previewButton, installButton, hackButton;
-    var winWidth, winHeight;
+    var winWidth, winHeight, rawPath = path;
 
     winWidth = 815;
     winHeight = 453;
@@ -116,7 +111,8 @@ Modules { var <modulesPath, globalPath, templateManager;
     path.folders.do{ arg item; var name;
       name = item.folderName;
       listView.addItem(
-        this.getInfo(name, \name, path: path.fullPath),
+        // this.getInfo(name, \name, path: path.fullPath),
+        name,
         {
           var title, body, credits, tags;
           title = "🍃 " + this.getInfo(name, \name, path: path.fullPath) + "\n";
@@ -137,7 +133,7 @@ Modules { var <modulesPath, globalPath, templateManager;
 
           previewButton.action = { "-> not implemented".postln; };
           installButton.action = {this.installModule(name, modulesPath)};
-          hackButton.action = {this.hackModule(name, modulesPath); window.close};
+          hackButton.action = {this.hackModule(name, source: rawPath); window.close};
         }
       );
     };
@@ -145,11 +141,10 @@ Modules { var <modulesPath, globalPath, templateManager;
     listView.valueAction = 0;
   }
 
-  installModule{ arg name, target, newName;
-
+  installModule{ arg name, target, newName, source = globalPath;
     if (File.exists(globalPath +/+ name.asString) or:{ newName.notNil }, {
       var sourcePath, targetPath;
-      sourcePath = this.getModuleGlobalPath(name);
+      sourcePath = source +/+ name;
       targetPath = target +/+ name.asString;
       if(newName.notNil){ targetPath = target +/+ newName.asString; };
       if (File.exists(targetPath).not, {
@@ -159,11 +154,11 @@ Modules { var <modulesPath, globalPath, templateManager;
         "You are already using a module with that name!".error;
       });
     },{
-      "There is no module with that name in the global repo!".error;
+      "There is no module with that name in either the local or the global repo!".error;
     });
   }
 
-  hackModule { arg name, target;
+  hackModule { arg name, source = globalPath, target = modulesPath;
     var dialog;
     dialog = Window.new("", Rect(
         GUI.window.screenBounds.width*0.5,
@@ -179,9 +174,30 @@ Modules { var <modulesPath, globalPath, templateManager;
     .font_(Font("Palatino", 30))
     .action_{ arg textField;
       dialog.close;
-      this.installModule(name, target, newName: textField.string.asSymbol);
+      this.installModule(name, target, newName: textField.string.asSymbol, source: source);
     };
 
   }
+
+  //Drafts
+
+  //Not functional
+  // replaceWithNewName { arg name, newName, sourcePath; var destinationPath;
+  //   // use this in installModule
+  //   // { 1.wait; this.replaceWithNewName(name, newName, globalPath); }.fork;
+  //   name.postln;
+  //   newName.postln;
+  //   destinationPath = modulesPath +/+ newName +/+ "info.yaml";
+  //   destinationPath.postln;
+  //   sourcePath.postln;
+  //   name = this.getInfo(name, \name, path: sourcePath);
+  //   name.postln;
+  //   File.use(sourcePath.standardizePath, "r", {
+  //     arg file; var string;
+  //     string = file.readAllString;
+  //     string = string.replace("name: " + name.asString, "name:" + newName.asString);
+  //     ^string.postln;
+  //   });
+  // }
 
 }
