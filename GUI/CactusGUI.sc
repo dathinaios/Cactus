@@ -135,7 +135,7 @@ CactusGUI {
     var winWidth, winHeight, windowRect;
 
     winWidth = 280;
-    winHeight = windowHeight;
+    winHeight = 112;
 
     windowRect = Rect(
       GUI.window.screenBounds.width-winWidth*0.5,
