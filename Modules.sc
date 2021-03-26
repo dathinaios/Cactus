@@ -78,7 +78,7 @@ Modules { var <modulesPath, globalPath, templateManager;
   }
 
   browseFromPath { arg path;
-    var window, listView, textView;
+    var currentModulesPath, window, listView, textView;
     var windowRect, previewButton, installButton, hackButton;
 
     path = PathName(path);
@@ -113,13 +113,13 @@ Modules { var <modulesPath, globalPath, templateManager;
     path.folders.do{ arg item; var name;
       name = item.folderName;
       listView.addItem(
-        this.getInfo(name, \name, path: modulesPath),
+        this.getInfo(name, \name, path: path.fullPath),
         {
           var title, body, credits, tags;
-          title = "🍃 " + this.getInfo(name, \name, path: modulesPath) + "\n";
-          body = "\n" + this.getInfo(name, \description, path: modulesPath).stripWhiteSpace + "\n\n";
-          credits = "Created by: " + this.getInfo(name, \author, path: modulesPath).stripWhiteSpace + "\n";
-          tags = "Tags: " + this.getInfo(name, \tags, path: modulesPath);
+          title = "🍃 " + this.getInfo(name, \name, path: path.fullPath) + "\n";
+          body = "\n" + this.getInfo(name, \description, path: path.fullPath).stripWhiteSpace + "\n\n";
+          credits = "Created by: " + this.getInfo(name, \author, path: path.fullPath).stripWhiteSpace + "\n";
+          tags = "Tags: " + this.getInfo(name, \tags, path: path.fullPath);
 
           textView.string = title + body + credits + tags;
 
