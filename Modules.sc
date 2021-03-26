@@ -125,22 +125,31 @@ Modules { var <modulesPath, globalPath, templateManager;
         // this.getInfo(name, \name, path: path.fullPath),
         name,
         {
-          var title, body, credits, tags;
+          var title, body, example, credits, tags;
           title = "🍃 " + this.getInfo(name, \name, path: path.fullPath) + "\n";
           body = "\n" + this.getInfo(name, \description, path: path.fullPath).stripWhiteSpace + "\n\n";
+          example = this.getInfo(name, \example, path: path.fullPath).stripWhiteSpace + "\n\n";
           credits = "Created by: " + this.getInfo(name, \author, path: path.fullPath).stripWhiteSpace + "\n";
           tags = "Tags: " + this.getInfo(name, \tags, path: path.fullPath);
 
-          textView.string = title + body + credits + tags;
+          textView.string = title ++ body ++ example + credits + tags;
 
-          textView.setFont(Font("Palatino", 48), 0, title.size - 4 );
+          // From Title to body
+          textView.setFont(Font("Palatino", 48), 0, title.size - 4);
           textView.setStringColor(Color(0.42, 0.57, 0.7640), 0, title.size - 4);
 
-          textView.setFont(Font("Palatino", 22), title.size - 2, title.size + body.size - 4 );
-          textView.setStringColor(Color.black, title.size - 2, title.size + body.size - 4);
+          // From body to example
+          textView.setFont(Font("Palatino", 22, italic: true), title.size - 4, 10000);
+          textView.setStringColor(Color.black, title.size - 4, 10000);
 
-          textView.setFont(Font("Palatino", 16), title.size + body.size -2 , 10000 );
-          textView.setStringColor( Color.grey, title.size + body.size -2, 10000);
+          // From example to credits
+          textView.setFont(Font("Palatino", 17), title.size + body.size - 4 , 10000 );
+          textView.setStringColor( Color.black, title.size + body.size - 4, 10000);
+
+          //credits
+          textView.setFont(Font("Palatino", 16), title.size + body.size + example.size - 4, 10000 );
+          textView.setStringColor( Color.grey, title.size + body.size + example.size - 4, 10000);
+
 
           previewButton.action = {this.previewModule(name, path.fullPath)};
           installButton.action = {this.installModule(name, modulesPath)};
@@ -197,26 +206,5 @@ Modules { var <modulesPath, globalPath, templateManager;
       { 5.wait; this.runCleanUp(PathName(path +/+ name ++ "/")) }.fork;
     };
   }
-
-  //Drafts
-
-  //Not functional
-  // replaceWithNewName { arg name, newName, sourcePath; var destinationPath;
-  //   // use this in installModule
-  //   // { 1.wait; this.replaceWithNewName(name, newName, globalPath); }.fork;
-  //   name.postln;
-  //   newName.postln;
-  //   destinationPath = modulesPath +/+ newName +/+ "info.yaml";
-  //   destinationPath.postln;
-  //   sourcePath.postln;
-  //   name = this.getInfo(name, \name, path: sourcePath);
-  //   name.postln;
-  //   File.use(sourcePath.standardizePath, "r", {
-  //     arg file; var string;
-  //     string = file.readAllString;
-  //     string = string.replace("name: " + name.asString, "name:" + newName.asString);
-  //     ^string.postln;
-  //   });
-  // }
 
 }
