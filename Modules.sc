@@ -211,24 +211,25 @@ Modules { var <modulesPath, globalPath, templateManager;
   replaceTitleWithNewName { 
     arg name, newName, sourcePath, targetPath; 
     var sourceInfo, originalTitle, yamlDictionary;
+    var stringResult;
 
     sourceInfo = sourcePath +/+ "info.yaml";
-    // name.postln;
-    // newName.postln;
-    // sourcePath.postln;
-    // targetPath.postln;
-
     yamlDictionary = sourceInfo.standardizePath.parseYAMLFile;
     originalTitle = yamlDictionary.at(\name.asString);
-
-    File.use(sourceInfo, "r", {
+    stringResult = File.use(sourceInfo, "r", {
       arg file; var string;
       string = file.readAllString;
       string = string.replace(
-        "name: " + originalTitle.asString, 
-        "name: " + newName.asString);
-      ^string.postln;
+        "name:" + originalTitle.asString, 
+        "name:" + newName.asString);
     });
+
+    { 1.wait;
+      this.createTheFile(targetPath +/+ "info.yaml", stringResult);
+    }.fork;
+  }
+
+  createTheFile { arg targetFilePath, generatedFileContent;
+    File.new(targetFilePath.standardizePath, "w").write(generatedFileContent).close;
   }
 }
-// if(newName.notNil){().postln;};
