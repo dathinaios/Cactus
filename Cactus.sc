@@ -1,12 +1,24 @@
 
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager, <modules;
-         var <buffersPath, <initPath, <configPath, <cleanupPath, <modulesPath;
+         var <buffersPath, <initPath, <configPath, <cleanupPath,
+             <classesPath, <modulesPath;
          var <at;
-         classvar <at;
+         classvar <at, <cachePath;
 
   *new { arg projectPath;
     ^super.newCopyArgs(projectPath).init;
+  }
+
+  *clearCache { var path;
+    path = cachePath.asString.standardizePath;
+    ("rm -r" + path.escapeChar($ ) +/+ "/*").unixCmd;
+    "🌵 Cactus Cache has been cleared 👍".postln;
+  }
+
+  *initClass {
+    at = Dictionary.new;
+    cachePath = Platform.userAppSupportDir +/+ "Extensions/_cactusCache";
   }
 
   // Public
@@ -62,10 +74,6 @@ Cactus { var <projectPath;
     ^options
   }
 
-  *initClass {
-    at = Dictionary.new;
-  }
-
   init {
     modules = Modules(projectPath +/+ "modules");
     buffers = Dictionary.new;
@@ -80,6 +88,7 @@ Cactus { var <projectPath;
     initPath = projectPath ++ "/init";
     configPath = projectPath ++ "/config.scd";
     cleanupPath = projectPath ++ "/cleanup.scd";
+    classesPath = projectPath ++ "/classes";
     modulesPath = projectPath ++ "/modules";
   }
 
@@ -92,6 +101,23 @@ Cactus { var <projectPath;
     this.displayLoadInfo;
     this.runConfig;
     this.runUserInit;
+    this.initClasses;
+  }
+
+  initClasses { var projectClassesPath;
+    projectClassesPath = cachePath +/+ projectName;
+    if (File.exists(classesPath), {
+      this.linkClassesFolder(projectClassesPath);
+    });
+  }
+
+  linkClassesFolder { arg path;
+    if (File.exists(path).not, {
+      ("ln -s" + classesPath.escapeChar($ )+ path.escapeChar($ )).unixCmd;
+      "🌵 You have custom classes in your Cactus project. They have been linked.".postln;
+      "🌵 These classes will remain linked until you run Cactus.clearCache".postln;
+      "🌵(You will need to re-compile before the classes become available)".postln;
+    });
   }
 
   initProjectName {
