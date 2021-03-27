@@ -161,6 +161,7 @@ Cactus { var <projectPath;
     this.checkAndCreateDir(initPath, "Initial");
     this.checkAndCreateFile(configPath, "Config");
     this.checkAndCreateFile(cleanupPath, "CleanUp");
+    this.checkAndCreateSilently(cachePath);
   }
 
   loadBuffers { var bufferArray;
@@ -227,6 +228,11 @@ Cactus { var <projectPath;
       File.new(path, "w").write("");
       ("created: " ++ path ++ "\n").postln;
     },{( name ++ " File - √" ).postln});
+  }
+
+  checkAndCreateSilently { arg path;
+    if ( File.exists(path).not, {
+      File.mkdir(path)});
   }
 
   postConfigInfo {
