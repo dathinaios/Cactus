@@ -156,12 +156,12 @@ Modules { var <modulesPath, templateManager;
           textView.setStringColor(Color.black, title.size - 4, 10000);
 
           // From example to credits
-          textView.setFont(Font("Palatino", 17), title.size + body.size - 4 , 10000 );
-          textView.setStringColor( Color.black, title.size + body.size - 4, 10000);
+          textView.setFont(Font("Menlo", 14), title.size + body.size - 4 , 10000 );
+          textView.setStringColor( Color.grey, title.size + body.size - 4, 10000);
 
           //credits
           textView.setFont(Font("Palatino", 16), title.size + body.size + example.size - 4, 10000 );
-          textView.setStringColor( Color.grey, title.size + body.size + example.size - 4, 10000);
+          textView.setStringColor( Color.black, title.size + body.size + example.size - 4, 10000);
 
 
           updateButton.action = {Modules.updateGlobal};
