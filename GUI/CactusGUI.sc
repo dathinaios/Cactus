@@ -119,7 +119,7 @@ CactusGUI {
     );
     windowHeight = windowHeight + projectControls.windowHeight;
     projectControls.openButton.action = { cactus.openProjectDir };
-    projectControls.label.string_("Project:" + cactus.projectName.asString.toUpper);
+    projectControls.label.string_("Project:" + cactus.projectName.asString);
     projectControls.restartButton.action = { cactus.restart };
     projectControls.buffersButton.action = { cactus.listBuffers };
     projectControls.modulesButton.action = { cactus.browseModules };
