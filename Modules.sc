@@ -95,7 +95,7 @@ Modules { var <modulesPath, templateManager;
 
   browseFromPath { arg path;
     var window, listView, textView;
-    var windowRect, previewButton, installButton, hackButton;
+    var windowRect, updateButton, previewButton, installButton, hackButton;
     var winWidth, winHeight, rawPath = path;
 
     winWidth = 815;
@@ -115,7 +115,12 @@ Modules { var <modulesPath, templateManager;
     textView = TextView(window, 600@400).background_(Color.white);
     textView.editable = false;
 
-    StaticText(window, Rect(width: 409, height: 40));
+    updateButton = Button(window, Rect(width: 128, height: 40) );
+    updateButton.states = [["Global Update", Color.white, Color.grey]];
+    updateButton.canFocus = false;
+
+    StaticText(window, Rect(width: 277 , height: 40));
+
     previewButton = Button(window, Rect(width: 128, height: 40) );
     previewButton.states = [["Preview", Color.white, Color.grey]];
     previewButton.canFocus = false;
@@ -159,6 +164,7 @@ Modules { var <modulesPath, templateManager;
           textView.setStringColor( Color.grey, title.size + body.size + example.size - 4, 10000);
 
 
+          updateButton.action = {Modules.updateGlobal};
           previewButton.action = {this.previewModule(name, path.fullPath)};
           installButton.action = {this.installModule(name, modulesPath)};
           hackButton.action = {this.hackModule(name, source: rawPath); window.close};
