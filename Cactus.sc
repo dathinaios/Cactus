@@ -261,7 +261,7 @@ Cactus { var <projectPath;
     };
     list.sort.do{ arg key;
       if(key.findRegexp("/*/").size == 1){"-----------------".postln;};
-      key.postln;
+      key.replace("\/", "\\").postln;
     };
   }
 
