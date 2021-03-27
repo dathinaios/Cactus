@@ -109,7 +109,6 @@ Modules { var <modulesPath, templateManager;
     window = Window.new( "Browser", windowRect, resizable: false).front;
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
-    // window.onClose = { "placeholder" };
 
     listView = EZListView.new(window,200@400);
     listView.font = Font("Monaco", 14);
@@ -167,7 +166,7 @@ Modules { var <modulesPath, templateManager;
       );
     };
 
-    listView.valueAction = 0;
+    if(listView.items.size > 0, { listView.valueAction = 0 });
   }
 
   installModule{ arg name, target, newName, source = globalPath;

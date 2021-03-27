@@ -52,13 +52,7 @@ Cactus { var <projectPath;
   }
 
   browseModules {
-    if (File.exists(modules.modulesPath), {
-      modules.browseLocal;
-    },{
-      File.mkdir(modules.modulesPath);
-      modules.installModule(\ModuleTemplate, modules.modulesPath);
-      { 1.wait; modules.browseLocal; }.fork(AppClock);
-    });
+    modules.browseLocal;
   }
 
   // Private
