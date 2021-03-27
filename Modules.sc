@@ -1,5 +1,6 @@
 
-Modules { var <modulesPath, globalPath, templateManager;
+Modules { var <modulesPath, templateManager;
+          classvar <globalPath;
 
   *new { arg modulesPath;
     modulesPath = modulesPath.standardizePath;
@@ -56,8 +57,11 @@ Modules { var <modulesPath, globalPath, templateManager;
 
   // Private
 
-  init {
+  *initClass {
     globalPath = Platform.userAppSupportDir ++ "/CactusModules";
+  }
+
+  init {
     this.runInits;
   }
 
@@ -74,12 +78,12 @@ Modules { var <modulesPath, globalPath, templateManager;
 
   // Manage CactusModules
 
-  installGlobal {
+  *installGlobal {
     ("git clone https://github.com/dathinaios/CactusModules.git"
       + globalPath.escapeChar($ )).unixCmd;
   }
 
-  updateGlobal {
+  *updateGlobal {
     ("git -C" + globalPath.escapeChar($ ) + "pull").unixCmd;
   }
 
