@@ -171,6 +171,7 @@ Modules { var <modulesPath, templateManager;
   }
 
   installModule{ arg name, target, newName, source = globalPath;
+    this.checkAndCreateSilently(modulesPath);
     if (File.exists(globalPath +/+ name.asString) or:{ newName.notNil }, {
       var sourcePath, targetPath;
       sourcePath = source +/+ name;
@@ -241,5 +242,10 @@ Modules { var <modulesPath, templateManager;
 
   createTheFile { arg targetFilePath, generatedFileContent;
     File.new(targetFilePath.standardizePath, "w").write(generatedFileContent).close;
+  }
+
+  checkAndCreateSilently { arg path;
+    if ( File.exists(path).not, {
+      File.mkdir(path)});
   }
 }
