@@ -43,11 +43,17 @@ Modules { var <modulesPath, templateManager;
   }
 
   browseGlobal {
-    if (File.exists(modulesPath), {
+    if (File.exists(globalPath), {
       this.browseFromPath(globalPath);
     },{
-      File.mkdir(modulesPath);
-      this.browseFromPath(globalPath);
+      Modules.installGlobal;
+      { "Downloading Global Modules".postln;
+        1.wait; ".".postln;
+        1.wait; "..".postln;
+        1.wait; "...".postln;
+        1.wait; "-> Done.".postln;
+        this.browseFromPath(globalPath);
+      }.fork(AppClock);
     });
   }
 
