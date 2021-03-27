@@ -2,7 +2,7 @@
 Cactus { var <projectPath;
          var <buffers, <projectName, <templateManager, <modules;
          var <buffersPath, <initPath, <configPath, <cleanupPath,
-             <classesPath, <modulesPath;
+             <classesPath;
          var <at;
          classvar <at, <cachePath;
 
@@ -12,7 +12,7 @@ Cactus { var <projectPath;
 
   *clearCache { var path;
     path = cachePath.asString.standardizePath;
-    if (PathName(path).folders.size.postln >= 1){
+    if (PathName(path).folders.size >= 1){
       ("rm -r" + path.escapeChar($ ) +/+ "/*").unixCmd;
     };
     "🌵 Cactus Cache has been cleared 👍".postln;
@@ -52,11 +52,11 @@ Cactus { var <projectPath;
   }
 
   browseModules {
-    if (File.exists(modulesPath), {
+    if (File.exists(modules.modulesPath), {
       modules.list;
     },{
-      File.mkdir(modulesPath);
-      modules.installModule(\ModuleTemplate, modulesPath);
+      File.mkdir(modules.modulesPath);
+      modules.installModule(\ModuleTemplate, modules.modulesPath);
       { 1.wait; modules.list; }.fork(AppClock);
     });
   }
@@ -91,7 +91,6 @@ Cactus { var <projectPath;
     configPath = projectPath ++ "/config.scd";
     cleanupPath = projectPath ++ "/cleanup.scd";
     classesPath = projectPath ++ "/classes";
-    modulesPath = projectPath ++ "/modules";
   }
 
   initWithPath {
