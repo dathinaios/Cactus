@@ -123,7 +123,7 @@ CactusGUI {
     projectControls.restartButton.action = { cactus.restart };
     projectControls.buffersButton.action = { cactus.listBuffers };
     projectControls.modulesButton.action = { cactus.browseModules };
-    projectControls.browseButton.action = { cactus.modules.browse };
+    projectControls.browseButton.action = { cactus.modules.browseGlobal };
   }
 
   popUpWarning {

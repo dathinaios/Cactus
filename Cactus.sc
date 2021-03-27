@@ -53,11 +53,11 @@ Cactus { var <projectPath;
 
   browseModules {
     if (File.exists(modules.modulesPath), {
-      modules.list;
+      modules.browseLocal;
     },{
       File.mkdir(modules.modulesPath);
       modules.installModule(\ModuleTemplate, modules.modulesPath);
-      { 1.wait; modules.list; }.fork(AppClock);
+      { 1.wait; modules.browseLocal; }.fork(AppClock);
     });
   }
 

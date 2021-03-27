@@ -9,13 +9,6 @@ Modules { var <modulesPath, templateManager;
 
   // Public
 
-  runInits { var path;
-    path = PathName(modulesPath);
-    path.folders.do({ arg folder;
-      this.runInit(folder);
-    });
-  }
-
   run { arg name, args; var path;
     if(args.global == true,
       { path = globalPath },
@@ -30,6 +23,13 @@ Modules { var <modulesPath, templateManager;
     ^yamlDictionary.at(key.asString);
   }
 
+  runInits { var path;
+    path = PathName(modulesPath);
+    path.folders.do({ arg folder;
+      this.runInit(folder);
+    });
+  }
+
   runCleanUps { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
@@ -42,7 +42,7 @@ Modules { var <modulesPath, templateManager;
     this.runInits;
   }
 
-  browse {
+  browseGlobal {
     if (File.exists(modulesPath), {
       this.browseFromPath(globalPath);
     },{
@@ -51,7 +51,7 @@ Modules { var <modulesPath, templateManager;
     });
   }
 
-  list { // assumes that we are pointing at a folder with valid modules
+  browseLocal { // assumes that we are pointing at a folder with valid modules
     this.browseFromPath(modulesPath);
   }
 
@@ -212,8 +212,8 @@ Modules { var <modulesPath, templateManager;
     };
   }
 
-  replaceTitleWithNewName { 
-    arg name, newName, sourcePath, targetPath; 
+  replaceTitleWithNewName {
+    arg name, newName, sourcePath, targetPath;
     var sourceInfo, originalTitle, yamlDictionary;
     var stringResult;
 
@@ -224,7 +224,7 @@ Modules { var <modulesPath, templateManager;
       arg file; var string;
       string = file.readAllString;
       string = string.replace(
-        "name:" + originalTitle.asString, 
+        "name:" + originalTitle.asString,
         "name:" + newName.asString);
     });
 
