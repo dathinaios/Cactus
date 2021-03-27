@@ -12,13 +12,10 @@ Cactus { var <projectPath;
 
   *clearCache { var path;
     path = cachePath.asString.standardizePath;
-    ("rm -r" + path.escapeChar($ ) +/+ "/*").unixCmd;
+    if (PathName(path).folders.size.postln >= 1){
+      ("rm -r" + path.escapeChar($ ) +/+ "/*").unixCmd;
+    };
     "🌵 Cactus Cache has been cleared 👍".postln;
-  }
-
-  *initClass {
-    at = Dictionary.new;
-    cachePath = Platform.userAppSupportDir +/+ "Extensions/_cactusCache";
   }
 
   // Public
@@ -65,6 +62,11 @@ Cactus { var <projectPath;
   }
 
   // Private
+
+  *initClass {
+    at = Dictionary.new;
+    cachePath = Platform.userAppSupportDir +/+ "Extensions/_cactusCache";
+  }
 
   returnCoreOptions { var options;
     options = ();
@@ -116,7 +118,7 @@ Cactus { var <projectPath;
       ("ln -s" + classesPath.escapeChar($ )+ path.escapeChar($ )).unixCmd;
       "🌵 You have custom classes in your Cactus project. They have been linked.".postln;
       "🌵 These classes will remain linked until you run Cactus.clearCache".postln;
-      "🌵(You will need to re-compile before the classes become available)".postln;
+      "🌵 (You will need to re-compile before the classes become available)".postln;
     });
   }
 
