@@ -51,6 +51,10 @@ Cactus { var <projectPath;
     SystemClock.sched(1, {this.restart});
   }
 
+  runModule { arg name, args;
+    modules.run(name, args);
+  }
+
   browseModules {
     modules.browseLocal;
   }
