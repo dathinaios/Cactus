@@ -117,7 +117,7 @@ Cactus { var <projectPath;
       Cactus.clearCache;
       ("ln -s" + classesPath.escapeChar($ )+ path.escapeChar($ )).unixCmd;
       "🌵 You have custom classes in your Cactus project. They have been linked.".postln;
-      "🌵 These classes will remain linked until you run Cactus.clearCache".postln;
+      "🌵 These classes will remain linked until you open a different Cactus project or run Cactus.clearCache".postln;
       "🌵 (You will need to recompile before the classes become available)".postln;
     });
   }
