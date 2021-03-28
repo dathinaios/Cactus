@@ -15,7 +15,7 @@ Cactus { var <projectPath;
     if (PathName(path).folders.size >= 1){
       ("rm -r" + path.escapeChar($ ) +/+ "/*").unixCmd;
     };
-    "🌵 Cactus Cache has been cleared 👍".postln;
+    "Clearing Cactus cache...".postln;
   }
 
   // Public
@@ -108,6 +108,7 @@ Cactus { var <projectPath;
 
   linkClassesFolder { arg path;
     if (File.exists(path).not, {
+      Cactus.clearCache;
       ("ln -s" + classesPath.escapeChar($ )+ path.escapeChar($ )).unixCmd;
       "🌵 You have custom classes in your Cactus project. They have been linked.".postln;
       "🌵 These classes will remain linked until you run Cactus.clearCache".postln;
