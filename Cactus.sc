@@ -111,7 +111,7 @@ Cactus { var <projectPath;
       ("ln -s" + classesPath.escapeChar($ )+ path.escapeChar($ )).unixCmd;
       "🌵 You have custom classes in your Cactus project. They have been linked.".postln;
       "🌵 These classes will remain linked until you run Cactus.clearCache".postln;
-      "🌵 (You will need to re-compile before the classes become available)".postln;
+      "🌵 (You will need to recompile before the classes become available)".postln;
     });
   }
 
@@ -122,7 +122,7 @@ Cactus { var <projectPath;
   }
 
   initTemplateManager {
-    templateManager = CactusTemplateManager.new;
+    templateManager = CactusTemplateManager(this);
   }
 
   runConfig {

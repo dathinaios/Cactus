@@ -1,15 +1,13 @@
 
-CactusTemplateManager { var <>templatesDir;
+CactusTemplateManager { var <cactus, <templatesDir;
 
-  *new { arg templatesDir;
-    ^super.newCopyArgs(templatesDir).init;
+  *new { arg cactus;
+    ^super.newCopyArgs(cactus).init;
   }
 
   init {
-    templatesDir ?? {
-      templatesDir = CactusTemplateManager.filenameSymbol.asString.dirname;
-      templatesDir = templatesDir ++ "/templates/"
-    };
+    templatesDir = CactusTemplateManager.filenameSymbol.asString.dirname;
+    templatesDir = templatesDir ++ "/templates/"
   }
 
   runTemplate { arg templateName, options = (); var path;
@@ -91,37 +89,70 @@ CactusTemplateManager { var <>templatesDir;
   // Drafts
 
   gui {
-    this.listGUI(templatesDir);
+    this.browseFromPath(templatesDir;);
   }
 
-  listGUI { arg path, action; var gui, infoGUI, infoWin;
+  browseFromPath { arg path;
+    var window, listView, textView;
+    var windowRect, applyButton, cancelButton;
+    var winWidth, winHeight, rawPath = path;
+
+    winWidth = 815;
+    winHeight = 453;
     path = PathName(path);
 
-    gui = EZListView.new(nil,200@200, "");
-    gui.font = Font("Monaco", 11);
-    infoWin = Window(
-      "Info",
-      Rect(
-        gui.window.bounds.left+gui.window.bounds.width,
-        gui.window.bounds.top-200, 400, 400),
-      scroll: true
-    ).front;
-    infoGUI = StaticText(infoWin, Rect(10, 10, 380, 380));
-    infoGUI.font = Font("Monaco", 11);
+    windowRect = Rect(
+      GUI.window.screenBounds.width-winWidth*0.5,
+      GUI.window.screenBounds.height-winHeight*0.5,
+      winWidth, winHeight);
+    window = Window.new( "Browser", windowRect, resizable: false).front;
+    window.view.decorator = FlowLayout( window.view.bounds );
+    window.background_(Color.fromHexString("#282828"));
 
-    path.folders.do{
-      arg item; var name, info;
+    listView = EZListView.new(window,200@400);
+    listView.font = Font("Monaco", 14);
+    textView = TextView(window, 600@400).background_(Color.white);
+    textView.editable = false;
+
+    StaticText(window, Rect(width: 384 , height: 40));
+
+    cancelButton = Button(window, Rect(width: 128, height: 40) );
+    cancelButton.states = [["Cancel", Color.white, Color.grey]];
+    cancelButton.canFocus = false;
+
+    applyButton = Button(window, Rect(width: 128, height: 40) );
+    applyButton.states = [["Apply", Color.white, Color.grey]];
+    applyButton.canFocus = false;
+
+    path.folders.do{ arg item; var name;
       name = item.folderName;
-      File.use(
-        path.fullPath ++ "/" ++ item.folderName ++ "/" ++ "readme.txt", "r",
+      listView.addItem(
+        this.getInfo(name, \name, path: path.fullPath),
         {
-          arg f; info = f.readAllString;
-          gui.addItem(name, { infoGUI.string = info });
+          var title, body, example, credits, tags;
+          title = "📜 " + this.getInfo(name, \name, path: path.fullPath) + "\n";
+          body = "\n" + this.getInfo(name, \description, path: path.fullPath).stripWhiteSpace + "\n\n";
+          textView.string = title ++ body;
+          // From Title to body
+          textView.setFont(Font("Palatino", 48), 0, title.size - 4);
+          textView.setStringColor(Color.fromHexString("#9d817f"), 0, title.size - 4);
+          // From body to end
+          textView.setFont(Font("Palatino", 22, italic: true), title.size - 4, 10000);
+          textView.setStringColor(Color.black, title.size - 4, 10000);
+          cancelButton.action = {window.close};
+          applyButton.action = {cactus.runTemplate(name.asSymbol); window.close;};
         }
       );
     };
 
-    gui.valueAction = 0;
+    if(listView.items.size > 0, { listView.valueAction = 0 });
   }
+
+  getInfo { arg name, key, path = templatesDir; var yamlDictionary;
+    path = path +/+ name +/+ "info.yaml";
+    yamlDictionary = path.standardizePath.parseYAMLFile;
+    ^yamlDictionary.at(key.asString);
+  }
+
 
 }

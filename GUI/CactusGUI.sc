@@ -47,6 +47,7 @@ CactusGUI {
           this.run;
           ("You could also open this project by running: \n"++
           "c = CactusGUI(\""++path++"\");").postln;
+          if(mode == 1){cactus.templateManager.gui;};
         },
         fileMode: 2,
         stripResult: true,
