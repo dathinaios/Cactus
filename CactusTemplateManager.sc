@@ -105,7 +105,7 @@ CactusTemplateManager { var <cactus, <templatesDir;
       GUI.window.screenBounds.width-winWidth*0.5,
       GUI.window.screenBounds.height-winHeight*0.5,
       winWidth, winHeight);
-    window = Window.new( "Browser", windowRect, resizable: false).front;
+    window = Window.new( "Template Browser", windowRect, resizable: false).front;
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
 
