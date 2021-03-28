@@ -114,7 +114,7 @@ CactusTemplateManager { var <cactus, <templatesDir;
     textView = TextView(window, 600@400).background_(Color.white);
     textView.editable = false;
 
-    StaticText(window, Rect(width: 384 , height: 40));
+    StaticText(window, Rect(width: 540 , height: 40));
 
     cancelButton = Button(window, Rect(width: 128, height: 40) );
     cancelButton.states = [["Cancel", Color.white, Color.grey]];
