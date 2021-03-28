@@ -137,7 +137,7 @@ CactusTemplateManager { var <cactus, <templatesDir;
           textView.setFont(Font("Palatino", 48), 0, title.size - 4);
           textView.setStringColor(Color.fromHexString("#9d817f"), 0, title.size - 4);
           // From body to end
-          textView.setFont(Font("Palatino", 22, italic: true), title.size - 4, 10000);
+          textView.setFont(Font("Palatino", 20, italic: true), title.size - 4, 10000);
           textView.setStringColor(Color.black, title.size - 4, 10000);
           cancelButton.action = {window.close};
           applyButton.action = {cactus.runTemplate(name.asSymbol); window.close;};

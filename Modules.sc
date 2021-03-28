@@ -152,7 +152,7 @@ Modules { var <modulesPath, templateManager;
           textView.setStringColor(Color(0.42, 0.57, 0.7640), 0, title.size - 4);
 
           // From body to example
-          textView.setFont(Font("Palatino", 22, italic: true), title.size - 4, 10000);
+          textView.setFont(Font("Palatino", 20, italic: true), title.size - 4, 10000);
           textView.setStringColor(Color.black, title.size - 4, 10000);
 
           // From example to credits
