@@ -1,5 +1,5 @@
 
-Modules { var <modulesPath, templateManager;
+Modules { var <modulesPath;
           classvar <globalPath;
 
   *new { arg modulesPath;
@@ -13,8 +13,7 @@ Modules { var <modulesPath, templateManager;
     if(args.global == true,
       { path = globalPath },
       { path = modulesPath });
-    path = path +/+ name +/+ "run.scd";
-    ^path.load.valueWithEnvir(args);
+    ^Module(path).run(name, args)
   }
 
   getInfo { arg name, key, path = globalPath; var yamlDictionary;
