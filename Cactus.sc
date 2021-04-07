@@ -34,7 +34,7 @@ Cactus { var <projectPath;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
-    this.runModulesInit;
+    this.runModulesSetup;
   }
 
   buf { arg name;
@@ -101,7 +101,7 @@ Cactus { var <projectPath;
     this.displayLoadInfo;
     this.runConfig;
     this.runUserInit;
-    this.runModulesInit;
+    this.runModulesSetup;
     this.initClasses;
   }
 
@@ -155,8 +155,8 @@ Cactus { var <projectPath;
     };
   }
 
-  runModulesInit {
-    modules.runInits;
+  runModulesSetup {
+    modules.runSetups;
   }
 
   createDirs {

@@ -22,23 +22,23 @@ Modules { var <modulesPath;
     ^yamlDictionary.at(key.asString);
   }
 
-  runInits { var path;
+  runSetups { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder;
-      this.runInit(folder);
+      this.runSetup(folder);
     });
   }
 
-  runCleanUps { var path;
+  runTearDowns { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
-      this.runCleanUp(folder);
+      this.runTearDown(folder);
     });
   }
 
   restart {
-    this.runCleanUps;
-    this.runInits;
+    this.runTearDowns;
+    this.runSetups;
   }
 
   browseGlobal {
@@ -67,18 +67,23 @@ Modules { var <modulesPath;
   }
 
   init {
-    this.runInits;
+    this.runSetups;
   }
 
-  runInit{ arg folder; var initPath;
-    initPath = PathName(folder.fullPath++"/init");
-    initPath.files.do{ arg i;
-      i.fullPath.load.value;
-    };
+  runSetup{ arg folder;
+    (folder.fullPath+/+"setup.scd").load;
+  }
+
+  runInit{ arg folder;
+    (folder.fullPath+/+"init.scd").load;
   }
 
   runCleanUp { arg folder;
-    (folder.fullPath++"cleanup.scd").load;
+    (folder.fullPath+/+"cleanup.scd").load;
+  }
+
+  runTearDown { arg folder;
+    (folder.fullPath+/+"teardown.scd").load;
   }
 
   // Manage CactusModules
@@ -216,6 +221,7 @@ Modules { var <modulesPath;
   }
 
   previewModule { arg name, path;
+    this.runSetup(PathName(path +/+ name));
     this.runInit(PathName(path +/+ name));
     this.getInfo(name, \preview, path: path).interpret.value(this);
     if(File.exists(path +/+ name ++ "/cleanup.scd")){
