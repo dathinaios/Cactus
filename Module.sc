@@ -6,10 +6,10 @@ Module { var <modulePath, <>soundProcess;
     ^super.newCopyArgs(modulePath);
   }
 
-  run { arg name, args; var path;
-    args.module = this;
+  run { arg name, environment; var path;
+    environment.module = this;
     path = modulePath +/+ name +/+ "run.scd";
-    ^path.load.valueWithEnvir(args);
+    ^path.load.valueWithEnvir(environment);
   }
 
 }
