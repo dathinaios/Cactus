@@ -53,7 +53,7 @@ Cactus { var <projectPath;
   }
 
   runModule { arg name, args;
-    modules.run(name, args);
+    ^modules.run(name, args);
   }
 
   browseModules {

@@ -13,7 +13,7 @@ Modules { var <modulesPath;
     if(environment.global == true,
       { path = globalPath },
       { path = modulesPath });
-    ^Module(path).run(name, environment)
+    ^Module(path, name, environment);
   }
 
   getInfo { arg name, key, path = globalPath; var yamlDictionary;
