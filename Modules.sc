@@ -98,7 +98,8 @@ Modules { var <modulesPath;
   }
 
   browseFromPath { arg path;
-    var window, listView, textView;
+    var window, listView, textView, textViewTitle, textViewDescription,
+        textViewExample, textViewCredits, textViewTags;
     var windowRect, updateButton, previewButton, installButton, hackButton;
     var winWidth, winHeight, rawPath = path;
 
@@ -116,8 +117,24 @@ Modules { var <modulesPath;
 
     listView = EZListView.new(window,200@400);
     listView.font = Font("Monaco", 14);
-    textView = TextView(window, 600@400).background_(Color.white);
-    textView.editable = false;
+
+    textView = View(window, 600@400);
+    textView.decorator = FlowLayout(textView.bounds, margin: 0@0, gap: 5@5);
+
+    textViewTitle = TextView(textView, 600@45).background_(Color.white);
+    textViewTitle.editable = false;
+
+    textViewDescription = TextView(textView, 600@140).background_(Color.white);
+    textViewDescription.editable = false;
+
+    textViewExample = TextView(textView, 600@140).background_(Color.white);
+    textViewExample.editable = false;
+
+    textViewCredits = TextView(textView, 600@25).background_(Color.white);
+    textViewCredits.editable = false;
+
+    textViewTags = TextView(textView, 600@25).background_(Color.white);
+    textViewTags.editable = false;
 
     updateButton = Button(window, Rect(width: 128, height: 40) );
     updateButton.states = [["Global Update", Color.white, Color.grey]];
@@ -143,30 +160,28 @@ Modules { var <modulesPath;
         this.getInfo(name, \name, path: path.fullPath),
         {
           var title, body, example, credits, tags;
-          title = "🍃 " + this.getInfo(name, \name, path: path.fullPath) + "\n";
-          body = "\n" + this.getInfo(name, \description, path: path.fullPath).stripWhiteSpace + "\n\n";
-          example = this.getInfo(name, \example, path: path.fullPath).stripWhiteSpace + "\n\n";
-          credits = "Created by: " + this.getInfo(name, \author, path: path.fullPath).stripWhiteSpace + "\n";
+          title = "🍃 " + this.getInfo(name, \name, path: path.fullPath);
+          body = this.getInfo(name, \description, path: path.fullPath).stripWhiteSpace;
+          example = this.getInfo(name, \example, path: path.fullPath).stripWhiteSpace;
+          credits = "Created by: " + this.getInfo(name, \author, path: path.fullPath).stripWhiteSpace;
           tags = "Tags: " + this.getInfo(name, \tags, path: path.fullPath);
 
-          textView.string = title ++ body ++ example + credits + tags;
+          textViewTitle.string = title;
+          textViewDescription.string = body;
+          textViewExample.string = example;
+          textViewCredits.string = credits;
+          textViewTags.string = tags;
 
-          // From Title to body
-          textView.setFont(Font("Palatino", 48), 0, title.size - 4);
-          textView.setStringColor(Color(0.42, 0.57, 0.7640), 0, title.size - 4);
-
-          // From body to example
-          textView.setFont(Font("Palatino", 18, italic: true), title.size - 4, 10000);
-          textView.setStringColor(Color.black, title.size - 4, 10000);
-
-          // From example to credits
-          textView.setFont(Font("Menlo", 14), title.size + body.size - 4 , 10000 );
-          textView.setStringColor( Color.grey, title.size + body.size - 4, 10000);
-
-          //credits
-          textView.setFont(Font("Palatino", 16), title.size + body.size + example.size - 4, 10000 );
-          textView.setStringColor( Color.black, title.size + body.size + example.size - 4, 10000);
-
+          textViewTitle.font = Font("Palatino", 34);
+          textViewTitle.stringColor(Color(0.42, 0.57, 0.7640));
+          textViewDescription.font = Font("Palatino", 16, italic: true);
+          textViewDescription.stringColor(Color.black);
+          textViewExample.font = Font("Menlo", 12);
+          textViewExample.stringColor(Color.black);
+          textViewCredits.font = Font("Palatino", 14);
+          textViewCredits.stringColor(Color.black);
+          textViewTags.font = Font("Palatino", 14);
+          textViewTags.stringColor(Color.black);
 
           updateButton.action = {Modules.updateGlobal};
           previewButton.action = {this.previewModule(name, path.fullPath)};
