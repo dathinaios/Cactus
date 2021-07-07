@@ -13,7 +13,7 @@ Module { var <modulePath, <name, <environment, <soundProcess;
     soundProcess = (path +/+ "run.scd").load.valueWithEnvir(environment);
   }
 
-  cleanUp { var path;
+  cleanup { var path;
     path = modulePath +/+ name;
     this.runCleanUp(PathName(path));
   }
