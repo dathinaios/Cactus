@@ -104,7 +104,7 @@ Modules { var <modulesPath;
     var winWidth, winHeight, rawPath = path;
 
     winWidth = 815;
-    winHeight = 453;
+    winHeight = 653;
     path = PathName(path);
 
     windowRect = Rect(
@@ -115,16 +115,16 @@ Modules { var <modulesPath;
     window.view.decorator = FlowLayout( window.view.bounds );
     window.background_(Color.fromHexString("#282828"));
 
-    listView = EZListView.new(window,200@400);
+    listView = EZListView.new(window,200@600);
     listView.font = Font("Monaco", 14);
 
-    textView = View(window, 600@400);
+    textView = View(window, 600@600);
     textView.decorator = FlowLayout(textView.bounds, margin: 0@0, gap: 5@5);
 
     textViewTitle = TextView(textView, 600@45).background_(Color.white);
     textViewTitle.editable = false;
 
-    textViewDescription = TextView(textView, 600@140).background_(Color.white);
+    textViewDescription = TextView(textView, 600@345).background_(Color.white);
     textViewDescription.editable = false;
 
     textViewExample = TextView(textView, 600@140).background_(Color.white);
