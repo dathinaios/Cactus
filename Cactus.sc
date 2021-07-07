@@ -38,7 +38,7 @@ Cactus { var <projectPath;
   }
 
   buf { arg name;
-    ^this.buffers.at(name);
+    ^this.buffers.at(name.asString);
   }
 
   bufnums { arg name; var bufs;
