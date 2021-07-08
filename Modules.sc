@@ -9,11 +9,11 @@ Modules { var <modulesPath;
 
   // Public
 
-  run { arg name, environment; var path;
-    if(environment.global == true,
+  run { arg name, arguments; var path;
+    if(arguments.includes(\isGlobalModule),
       { path = globalPath },
       { path = modulesPath });
-    ^Module(path, name, environment);
+    ^Module(path, name, arguments);
   }
 
   getInfo { arg name, key, path = globalPath; var yamlDictionary;

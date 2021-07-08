@@ -1,26 +1,27 @@
 
-Module { var <modulePath, <name, <environment, <soundProcess;
+Module { var <modulePath, <name, <arguments, <soundProcess;
 
-  *new { arg modulePath, name, environment;
+  *new { arg modulePath, name, arguments;
     modulePath = modulePath.standardizePath;
-    ^super.newCopyArgs(modulePath, name, environment).run;
+    ^super.newCopyArgs(modulePath, name, arguments).run;
   }
 
   run { var path;
-    environment.module = this;
+    arguments = arguments.add(\module);
+    arguments = arguments.add(this);
     path = modulePath +/+ name;
     this.runInit(PathName(path));
-    soundProcess = (path +/+ "run.scd").load.valueWithEnvir(environment);
+    soundProcess = (path +/+ "run.scd").load.performKeyValuePairs(\value, arguments);
   }
 
   cleanup { var path;
     path = modulePath +/+ name;
     path = PathName(path);
-    (path.fullPath+/+"cleanup.scd").load.valueWithEnvir(environment);
+    (path.fullPath+/+"cleanup.scd").load.performKeyValuePairs(\value, arguments);
   }
 
   runInit{ arg folder;
-    (folder.fullPath+/+"init.scd").load.valueWithEnvir(environment);
+    (folder.fullPath+/+"init.scd").load.performKeyValuePairs(\value, arguments);
   }
 
   free {
