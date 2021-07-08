@@ -15,15 +15,20 @@ Module { var <modulePath, <name, <environment, <soundProcess;
 
   cleanup { var path;
     path = modulePath +/+ name;
-    this.runCleanUp(PathName(path));
+    path = PathName(path);
+    (path.fullPath+/+"cleanup.scd").load.valueWithEnvir(environment);
   }
 
   runInit{ arg folder;
-    (folder.fullPath+/+"init.scd").load;
+    (folder.fullPath+/+"init.scd").load.valueWithEnvir(environment);
   }
 
-  runCleanUp { arg folder;
-    (folder.fullPath+/+"cleanup.scd").load;
+  free {
+    this.cleanup;
+  }
+
+  stop {
+    this.free;
   }
 
 }
