@@ -123,6 +123,7 @@ Modules { var <modulesPath;
 
     textViewTitle = TextView(textView, 600@45).background_(Color.white);
     textViewTitle.editable = false;
+    textViewTitle.hasVerticalScroller = false;
 
     textViewDescription = TextView(textView, 600@345).background_(Color.white);
     textViewDescription.editable = false;
@@ -172,16 +173,17 @@ Modules { var <modulesPath;
           textViewCredits.string = credits;
           textViewTags.string = tags;
 
-          textViewTitle.font = Font("Palatino", 34);
-          textViewTitle.stringColor(Color(0.42, 0.57, 0.7640));
+          textViewTitle.font = Font("Palatino", 28);
+          textViewTitle.stringColor = Color(0.42, 0.57, 0.7640);
           textViewDescription.font = Font("Palatino", 16, italic: true);
-          textViewDescription.stringColor(Color.black);
+          textViewDescription.stringColor = Color.black;
           textViewExample.font = Font("Menlo", 12);
-          textViewExample.stringColor(Color.black);
+          textViewExample.stringColor = Color.black;
+          textViewExample.syntaxColorize;
           textViewCredits.font = Font("Palatino", 14);
-          textViewCredits.stringColor(Color.black);
+          textViewCredits.stringColor = Color.black;
           textViewTags.font = Font("Palatino", 14);
-          textViewTags.stringColor(Color.black);
+          textViewTags.stringColor = Color.black;
 
           updateButton.action = {Modules.updateGlobal};
           previewButton.action = {this.previewModule(name, path.fullPath)};
