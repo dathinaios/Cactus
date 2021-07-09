@@ -7,8 +7,8 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
   }
 
   run { var path;
-    arguments = arguments.insert(0, this);
-    arguments = arguments.insert(0, \module);
+    arguments = arguments.add(\module);
+    arguments = arguments.add(this);
     path = modulePath +/+ name;
     this.runInit(PathName(path));
     soundProcess = (path +/+ "run.scd").load.performKeyValuePairs(\value, arguments);

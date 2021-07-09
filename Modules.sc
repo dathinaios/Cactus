@@ -9,8 +9,8 @@ Modules { var <modulesPath;
 
   // Public
 
-  run { arg name, arguments; var path;
-    if(arguments.includes(\isGlobalModule),
+  run { arg name, arguments, options = (); var path;
+    if(options.global == true,
       { path = globalPath },
       { path = modulesPath });
     ^Module(path, name, arguments);
