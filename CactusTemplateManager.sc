@@ -18,11 +18,13 @@ CactusTemplateManager { var <cactus, <templatesDir;
 
   copyTemplateBaseFiles { arg path, options;
     path.files.do{ arg file;
-      this.createFromTemplateFile(
-        sourcePath: file,
-        targetDir: options.targetDir,
-        options: options
-      );
+      if(file.fileName != "info.yaml"){
+        this.createFromTemplateFile(
+          sourcePath: file,
+          targetDir: options.targetDir,
+          options: options
+        );
+      };
     };
   }
 
@@ -43,7 +45,6 @@ CactusTemplateManager { var <cactus, <templatesDir;
   createFromTemplateFile {
     arg sourcePath, targetDir, options;
     var targetFilePath, generatedFileContent;
-
     targetFilePath = targetDir +/+ sourcePath.fileName;
     targetFilePath = targetFilePath.standardizePath;
     generatedFileContent = this.parseTemplateFile(
