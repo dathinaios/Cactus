@@ -70,8 +70,11 @@ Modules { var <modulesPath;
     this.runSetups;
   }
 
-  runFile { arg folder, file;
-    ^(folder.fullPath+/+file.asString++".scd").load.value(this);
+  runFile { arg folder, file; var path;
+    path = (folder.fullPath+/+file.asString++".scd");
+    if (File.exists(path), {
+      ^path.load.value(this);
+    });
   }
 
   runFilesForFolder{ arg path, file;
