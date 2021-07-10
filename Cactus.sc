@@ -25,11 +25,12 @@ Cactus { var <projectPath;
   }
 
   restart {
+    this.runModulesTearDown;
     this.runCleanUp;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
-    modules.restart;
+    this.runModulesSetup;
   }
 
   clear {
@@ -84,7 +85,6 @@ Cactus { var <projectPath;
   }
 
   init {
-    modules = Modules(projectPath +/+ "modules");
     buffers = Dictionary.new;
     at = Dictionary.new;
     projectPath = projectPath.standardizePath;
@@ -109,7 +109,7 @@ Cactus { var <projectPath;
     this.displayLoadInfo;
     this.runConfig;
     this.runUserInit;
-    this.runModulesSetup;
+    this.initModules;
     this.initClasses;
   }
 
@@ -118,6 +118,10 @@ Cactus { var <projectPath;
     if (File.exists(classesPath), {
       this.linkClassesFolder(projectClassesPath);
     });
+  }
+
+  initModules {
+    modules = Modules(projectPath +/+ "modules");
   }
 
   linkClassesFolder { arg path;
@@ -159,6 +163,10 @@ Cactus { var <projectPath;
 
   runModulesSetup {
     modules.runSetups;
+  }
+
+  runModulesTearDown {
+    modules.runTearDowns;
   }
 
   createDirs {
@@ -257,7 +265,7 @@ Cactus { var <projectPath;
 
   displayLoadInfo {
     "\n".postln;
-    ("-> Project \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
+    ("-> 🌵 Project \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
   }
 
   getFolderNameFromString { arg path;
