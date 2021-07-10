@@ -25,14 +25,14 @@ Modules { var <modulesPath;
   runSetups { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder;
-      this.runSetup(folder);
+      this.runFile(folder, "setup");
     });
   }
 
   runTearDowns { var path;
     path = PathName(modulesPath);
     path.folders.do({ arg folder; var initPath;
-      this.runTearDown(folder);
+      this.runFile(folder, "teardown");
     });
   }
 
@@ -70,20 +70,8 @@ Modules { var <modulesPath;
     this.runSetups;
   }
 
-  runSetup{ arg folder;
-    (folder.fullPath+/+"setup.scd").load;
-  }
-
-  runInit{ arg folder;
-    (folder.fullPath+/+"init.scd").load;
-  }
-
-  runCleanUp { arg folder;
-    (folder.fullPath+/+"cleanup.scd").load;
-  }
-
-  runTearDown { arg folder;
-    (folder.fullPath+/+"teardown.scd").load;
+  runFile { arg folder, file;
+    ^(folder.fullPath+/+file.asString++".scd").load;
   }
 
   // Manage CactusModules
@@ -238,11 +226,14 @@ Modules { var <modulesPath;
   }
 
   previewModule { arg name, path;
-    this.runSetup(PathName(path +/+ name));
-    this.runInit(PathName(path +/+ name));
+    this.runFile(PathName(path +/+ name), "setup");
+    this.runFile(PathName(path +/+ name), "init");
     this.getInfo(name, \preview, path: path).interpret.value(this);
     if(File.exists(path +/+ name ++ "/cleanup.scd")){
-      { 5.wait; this.runCleanUp(PathName(path +/+ name ++ "/")) }.fork;
+      { 5.wait;
+        this.runFile(PathName(path +/+ name), "cleanup");
+        this.runFile(PathName(path +/+ name), "teardown");
+      }.fork;
     };
   }
 

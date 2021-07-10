@@ -10,18 +10,19 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
     arguments = arguments.add(\module);
     arguments = arguments.add(this);
     path = modulePath +/+ name;
-    this.runInit(PathName(path));
-    soundProcess = (path +/+ "run.scd").load.performKeyValuePairs(\value, arguments);
+    this.runFile(PathName(path), "init");
+    soundProcess = this.runFile(PathName(path), "run");
   }
 
   cleanup { var path;
     path = modulePath +/+ name;
     path = PathName(path);
-    (path.fullPath+/+"cleanup.scd").load.performKeyValuePairs(\value, arguments);
+    this.runFile(path, "cleanup");
   }
 
-  runInit{ arg folder;
-    (folder.fullPath+/+"init.scd").load.performKeyValuePairs(\value, arguments);
+  runFile { arg folder, file;
+    ^(folder.fullPath+/+file.asString++".scd")
+      .load.performKeyValuePairs(\value, arguments);
   }
 
   free {
