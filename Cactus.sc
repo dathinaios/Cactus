@@ -63,8 +63,8 @@ Cactus { var <projectPath;
   }
 
   clearBuffers {
-    if(buffers.size > 0){
-      "-> Clearing Buffers from Memory".postln};
+    // if(buffers.size > 0){
+    //   "-> Clearing Buffers from Memory".postln};
     buffers.do{arg i; i.free;};
     buffers.clear;
   }
@@ -180,7 +180,7 @@ Cactus { var <projectPath;
 
   loadBuffers { var bufferArray;
     this.clearBuffers;
-    "-> Loading Buffers to Memory".postln;
+    // "-> Loading Buffers to Memory".postln;
     bufferArray = this.collectIntoBuffers(buffersPath);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
       folderName = this.getPathAfterBuffersFolder(soundFile.path);

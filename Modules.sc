@@ -76,8 +76,8 @@ Modules { var <modulesPath;
 
   runFilesForFolder{ arg path, file;
     path = PathName(path);
-    if(path.folders.size > 0){
-      ("-> Running "++file++" files for all modules").postln};
+    // if(path.folders.size > 0){
+    //   ("-> Running "++file++" files for all modules").postln};
     path.folders.do({ arg folder;
       this.runFile(folder, file);
     });
