@@ -229,12 +229,9 @@ Modules { var <modulesPath;
   previewModule { arg name, path;
     this.runFile(PathName(path +/+ name), "setup");
     this.getInfo(name, \preview, path: path).interpret.value(this);
-    if(File.exists(path +/+ name ++ "/cleanup.scd")){
-      { 5.wait;
-        this.runFile(PathName(path +/+ name), "cleanup");
-        this.runFile(PathName(path +/+ name), "teardown");
-      }.fork;
-    };
+    { 5.wait;
+      this.runFile(PathName(path +/+ name), "teardown");
+    }.fork;
   }
 
   replaceTitleWithNewName {
