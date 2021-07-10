@@ -14,9 +14,11 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
   run { var path;
     arguments = arguments.add(\module);
     arguments = arguments.add(this);
-    path = modulePath +/+ name;
-    this.runFile(PathName(path), "init");
-    soundProcess = this.runFile(PathName(path), "run");
+    path = PathName(modulePath +/+ name);
+    if(File.exists(path.fullPath), {
+      this.runFile(path, "init");
+      soundProcess = this.runFile(path, "run");
+    },{("Module"+name+"not installed.").error});
   }
 
   cleanup { var path;
@@ -25,9 +27,11 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
     this.runFile(path, "cleanup");
   }
 
-  runFile { arg folder, file;
-    ^(folder.fullPath+/+file.asString++".scd")
-      .load.performKeyValuePairs(\value, arguments);
+  runFile { arg folder, file; var path;
+    path = (folder.fullPath+/+file.asString++".scd");
+    if (File.exists(path), {
+      ^path.load.performKeyValuePairs(\value, arguments);
+    });
   }
 
   free {
