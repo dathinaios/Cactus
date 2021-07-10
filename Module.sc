@@ -21,10 +21,10 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
     },{("Module"+name+"not installed.").error});
   }
 
-  cleanup { var path;
+  stop { var path;
     path = modulePath +/+ name;
     path = PathName(path);
-    this.runFile(path, "cleanup");
+    this.runFile(path, "stop");
   }
 
   runFile { arg folder, file; var path;
@@ -35,11 +35,7 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
   }
 
   free {
-    this.cleanup;
-  }
-
-  stop {
-    this.free;
+    this.stop;
   }
 
 }
