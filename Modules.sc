@@ -1,5 +1,6 @@
 
 Modules { var <modulesPath;
+          var <envir;
           classvar <globalPath;
 
   *new { arg modulesPath;
@@ -23,16 +24,22 @@ Modules { var <modulesPath;
   }
 
   runSetups { var path;
+    "-> Running setup files for all modules".postln;
     this.runFilesForFolder(modulesPath, "setup");
   }
 
   runTearDowns { var path;
+    "-> Running teardown files for all modules".postln;
     this.runFilesForFolder(modulesPath, "teardown");
   }
 
   restart {
     this.runTearDowns;
     this.runSetups;
+  }
+
+  clear {
+    this.runTearDowns;
   }
 
   browseGlobal {
@@ -61,11 +68,12 @@ Modules { var <modulesPath;
   }
 
   init {
+    envir = ();
     this.runSetups;
   }
 
   runFile { arg folder, file;
-    ^(folder.fullPath+/+file.asString++".scd").load;
+    ^(folder.fullPath+/+file.asString++".scd").load.value(this);
   }
 
   runFilesForFolder{ arg path, file;

@@ -24,17 +24,18 @@ Cactus { var <projectPath;
     projectPath.openOS;
   }
 
-  clearBuffers {
-    buffers.do{arg i; i.free;};
-    buffers.clear;
-  }
-
   restart {
     this.runCleanUp;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
-    this.runModulesSetup;
+    modules.restart;
+  }
+
+  clear {
+    this.runCleanUp;
+    this.clearBuffers;
+    modules.clear;
   }
 
   buf { arg name;
@@ -58,6 +59,13 @@ Cactus { var <projectPath;
 
   browseModules {
     modules.browseLocal;
+  }
+
+  clearBuffers {
+    if(buffers.size > 0){
+      "-> Clearing Buffers from Memory".postln};
+    buffers.do{arg i; i.free;};
+    buffers.clear;
   }
 
   // Private
@@ -142,12 +150,6 @@ Cactus { var <projectPath;
     cleanupPath.load.value;
   }
 
-  clear {
-    "-> Clearing Buffers from Memory".postln;
-    this.clearBuffers;
-    this.runCleanUp;
-  }
-
   runUserInit { var path;
     path = PathName(initPath);
     path.files.do{ arg i;
@@ -170,6 +172,7 @@ Cactus { var <projectPath;
 
   loadBuffers { var bufferArray;
     this.clearBuffers;
+    "-> Loading Buffers to Memory".postln;
     bufferArray = this.collectIntoBuffers(buffersPath);
     bufferArray.do{arg soundFile; var folderName, soundFileName;
       folderName = this.getPathAfterBuffersFolder(soundFile.path);
@@ -254,7 +257,7 @@ Cactus { var <projectPath;
 
   displayLoadInfo {
     "\n".postln;
-    ("-> \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
+    ("-> Project \'" ++ projectPath.basename ++ "\'" ++ " has been initialised").postln;
   }
 
   getFolderNameFromString { arg path;
