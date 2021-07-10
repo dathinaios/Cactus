@@ -172,7 +172,7 @@ Cactus { var <projectPath;
   createDirs {
     this.checkAndCreateDir(projectPath, "Project");
     this.checkAndCreateDir(buffersPath, "Buffers");
-    this.checkAndCreateDir(initPath, "Initial");
+    this.checkAndCreateDir(initPath, "Init");
     this.checkAndCreateFile(configPath, "Config");
     this.checkAndCreateFile(cleanupPath, "CleanUp");
     this.checkAndCreateSilently(cachePath);
