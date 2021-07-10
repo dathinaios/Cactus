@@ -1,9 +1,14 @@
 
 Module { var <modulePath, <name, <arguments, <soundProcess;
+         var <envir;
 
   *new { arg modulePath, name, arguments;
     modulePath = modulePath.standardizePath;
-    ^super.newCopyArgs(modulePath, name, arguments).run;
+    ^super.newCopyArgs(modulePath, name, arguments).init.run;
+  }
+
+  init {
+    envir = ();
   }
 
   run { var path;
