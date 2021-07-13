@@ -1,11 +1,12 @@
 
 TITLE:: Cactus
 summary:: The core class for the the Cactus framework
+categories:: Customization, Files, Utilities
 related:: Classes/Modules
 
 DESCRIPTION::
 
-A style agnostic framework for creative coding using the SuperCollider 
+A style agnostic framework for creative coding using the SuperCollider
 audio programming language. At its most basic level it will:
 
 LIST::
@@ -21,14 +22,14 @@ METHOD:: new
 Create a new instance of link::Classes/Cactus::
 
 ARGUMENT:: projectPath
-A string denoting the path of the project. 
-If the path exists link::Classes/Cactus:: 
-will load it. If it does not exist it will 
+A string denoting the path of the project.
+If the path exists link::Classes/Cactus::
+will load it. If it does not exist it will
 create the initial structure.
 
 NOTE::
-If you don't provide a path a dialog will 
-open to allow you to manually designate a 
+If you don't provide a path a dialog will
+open to allow you to manually designate a
 path using the OS file manager.
 ::
 
@@ -36,8 +37,8 @@ returns:: A Cactus instance
 
 METHOD:: at
 A convenience global link::Classes/Dictionary::. It
-can be used to store any value but it also stores the 
-instance for every running project under the project name 
+can be used to store any value but it also stores the
+instance for every running project under the project name
 (the project name is the name of its main folder).
 
 returns:: The contents at 'key'
@@ -45,7 +46,7 @@ returns:: The contents at 'key'
 code::
 // For a project at folder /test
 Cactus("/test");
-Cactus.at['test']; // returns the instance 
+Cactus.at['test']; // returns the instance
 ::
 
 INSTANCEMETHODS::
