@@ -16,7 +16,6 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
     arguments = arguments.add(this);
     path = PathName(modulePath +/+ name);
     if(File.exists(path.fullPath), {
-      this.runFile(path, "init");
       soundProcess = this.runFile(path, "run");
     },{("Module"+name+"not installed.").error});
   }

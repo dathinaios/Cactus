@@ -25,18 +25,18 @@ Cactus { var <projectPath;
   }
 
   restart {
-    this.runModulesTearDown;
-    this.runCleanUp;
+    this.runModulesCleanups;
+    this.runCleanup;
     this.loadBuffers;
     this.displayLoadInfo;
     this.runUserInit;
-    this.runModulesSetup;
+    this.runModulesInits;
   }
 
   clear {
-    this.runCleanUp;
+    this.runCleanup;
     this.clearBuffers;
-    modules.clear;
+    this.runModulesCleanups;
   }
 
   buf { arg name;
@@ -149,7 +149,7 @@ Cactus { var <projectPath;
     configPath.load.value;
   }
 
-  runCleanUp {
+  runCleanup {
     this.postCleanupInfo;
     cleanupPath.load.value;
   }
@@ -161,12 +161,12 @@ Cactus { var <projectPath;
     };
   }
 
-  runModulesSetup {
-    modules.runSetups;
+  runModulesInits {
+    modules.runInits;
   }
 
-  runModulesTearDown {
-    modules.runTearDowns;
+  runModulesCleanups {
+    modules.clear;
   }
 
   createDirs {

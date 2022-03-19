@@ -23,21 +23,21 @@ Modules { var <modulesPath;
     ^yamlDictionary.at(key.asString);
   }
 
-  runSetups { var path;
-    this.runFilesForFolder(modulesPath, "setup");
+  runInits { var path;
+    this.runFilesForFolder(modulesPath, "init");
   }
 
-  runTearDowns { var path;
-    this.runFilesForFolder(modulesPath, "teardown");
+  runCleanups { var path;
+    this.runFilesForFolder(modulesPath, "cleanup");
   }
 
   restart {
-    this.runTearDowns;
-    this.runSetups;
+    this.runCleanups ;
+    this.runInits;
   }
 
   clear {
-    this.runTearDowns;
+    this.runCleanups;
   }
 
   browseGlobal {
@@ -67,13 +67,13 @@ Modules { var <modulesPath;
 
   init {
     envir = ();
-    this.runSetups;
+    this.runInits;
   }
 
   runFile { arg folder, file; var path;
     path = (folder.fullPath+/+file.asString++".scd");
     if (File.exists(path), {
-      ^path.load.value(this);
+      ^path.load.value;
     });
   }
 
@@ -238,10 +238,11 @@ Modules { var <modulesPath;
   }
 
   previewModule { arg name, path;
-    this.runFile(PathName(path +/+ name), "setup");
+    this.runFile(PathName(path +/+ name), "init");
     this.getInfo(name, \preview, path: path).interpret.value(this);
     { 5.wait;
-      this.runFile(PathName(path +/+ name), "teardown");
+      this.runFile(PathName(path +/+ name), "stop");
+      this.runFile(PathName(path +/+ name), "cleanup");
     }.fork;
   }
 
