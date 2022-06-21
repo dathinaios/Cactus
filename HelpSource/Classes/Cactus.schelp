@@ -11,8 +11,8 @@ audio programming language. At its most basic level it will:
 LIST::
 ## Create a project file structure with configuration, initialisation and cleanup files.
 ## Create a buffers folder from which it collects all sound files and make them available through an intuitive interface.
-## Allow for defining quickstart templates for different types of projects using a (very) basic templating engine.
-## Allow for the creationand access of modules of sound processes (not available yet).
+## [work in progress] Allow for defining quickstart templates for different types of projects using a (very) basic templating engine.
+## [work in progress] Allow for the creation and access of modules of sound processes (not available yet).
 ::
 
 CLASSMETHODS::
@@ -27,9 +27,9 @@ will load it. If it does not exist it will
 create the initial structure.
 
 NOTE::
-If you don't provide a path a dialog will 
-open to allow you to manually designate a 
-path using the OS file manager.
+You can use link::Classes/CactusGUI:: for ease of access
+to creating and managing Cactus projects.
+Start there if you are new to the framework.
 ::
 
 returns:: A Cactus instance
@@ -51,75 +51,63 @@ Cactus.at['test']; // returns the instance
 INSTANCEMETHODS::
 
 METHOD:: restart
-(describe method here)
-
-returns:: (describe returnvalue here)
+This will re-initialise the project after running 'cleanup.scd'. It
+will not rerun 'config.scd'.
 
 METHOD:: clearBuffers
-(describe method here)
-
-returns:: (describe returnvalue here)
+Free all buffers.
 
 METHOD:: at
-(describe method here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: loadBuffers
-(describe method here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: projectName
-(describe method here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: buf
-(describe method here)
-
-ARGUMENT:: name
-(describe argument here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: bufnums
-(describe method here)
-
-ARGUMENT:: name
-(describe argument here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: projectPath
-(describe method here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: openProjectDir
-(describe method here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: buffers
-(describe method here)
-
-returns:: (describe returnvalue here)
-
-METHOD:: runTemplate
-(describe method here)
-
-ARGUMENT:: templateName
-(describe argument here)
-
-ARGUMENT:: options
-(describe argument here)
-
-returns:: (describe returnvalue here)
-
-EXAMPLES::
+A convenience local link::Classes/Dictionary::. It
+can be used to store any value.
 
 code::
-(some example code)
+// For a project at folder /test
+c = Cactus("/test");
+c.at[\someValue] = 2;
+c.at[\someValue];
 ::
 
+METHOD:: projectName
+Get the projectName.
+
+METHOD:: buf
+Get a buffer from the automatically loaded buffers (from the 'buffers' folder of
+the project).
+
+ARGUMENT:: name
+The name of the buffer as a symbol. Providing the name of the file returns the
+buffer. Providing the name of a folder returns a List of the buffers in the
+folder.
+
+code::
+c = Cactus("/path/to/the/project");
+// for a test.wav file found at the root of the buffers folder
+c.buf("/test");
+// for an asdf.wav file found in the folder moreSounds
+c.buf("/moreSounds/asdf");
+// get a List of all files in the moreSounds folder
+c.buf("/moreSounds")
+::
+
+METHOD:: bufnums
+Like 'buf' but returns bufnums instead of buffers.
+
+METHOD:: projectPath
+Returns the project path.
+
+METHOD:: openProjectDir
+Open the project directory using the OS file browser.
+
+METHOD:: buffers
+Return the Dictionary that contains all the buffers.
+
+METHOD:: runTemplate
+Apply a template to the project. A template provides an easy way to recall
+common Cactus configurations.
+
+ARGUMENT:: templateName
+A symbol with the template name.
+
+ARGUMENT:: options
+An Event of options to be used by the template.
