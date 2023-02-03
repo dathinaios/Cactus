@@ -1,0 +1,44 @@
+
+TITLE:: CactusGUI
+summary::  A GUI for the Cactus framework
+categories:: Undocumented classes
+related:: Classes/SomeRelatedClass, Reference/SomeRelatedStuff, etc.
+related:: Classes/Cactus
+
+DESCRIPTION::
+A convenient GUI for the Cactus framework.
+
+CLASSMETHODS::
+
+METHOD:: new
+Create a new instance of link::Classes/Cactus::
+
+ARGUMENT::path
+A string denoting the path of the project.
+If the path exists link::Classes/Cactus::
+will load it. If it does not exist it will
+provide options for creating a new project.
+
+ARGUMENT:: options
+An event of one or more options.
+
+code::
+b = CactusGUI(
+	"path/to/project"
+	options: (
+		// Left bound of the CactusGUI window
+		left: GUI.window.screenBounds.width*0.5 - 141,
+		// Top bound of the CactusGUI window
+		top: GUI.window.screenBounds.height*0.5 + 165,
+		// enable/disable keyboard shortcuts
+		shortcuts: true
+		// O: open project dir
+	)
+);
+::
+
+
+INSTANCEMETHODS::
+
+METHOD:: cactus
+Return the Cactus instance
