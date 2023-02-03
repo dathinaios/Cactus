@@ -32,7 +32,7 @@ Modules { var <modulesPath;
   }
 
   restart {
-    this.runCleanups ;
+    this.runCleanups;
     this.runInits;
   }
 
@@ -146,6 +146,7 @@ Modules { var <modulesPath;
     previewButton = Button(window, Rect(width: 128, height: 40) );
     previewButton.states = [["Preview", Color.white, Color.grey]];
     previewButton.canFocus = false;
+    previewButton.visible = false;
 
     installButton = Button(window, Rect(width: 128, height: 40) );
     installButton.states = [["install", Color.white, Color.grey]];
@@ -238,12 +239,13 @@ Modules { var <modulesPath;
   }
 
   previewModule { arg name, path;
-    this.runFile(PathName(path +/+ name), "init");
-    this.getInfo(name, \preview, path: path).interpret.value(this);
-    { 5.wait;
-      this.runFile(PathName(path +/+ name), "stop");
-      this.runFile(PathName(path +/+ name), "cleanup");
-    }.fork;
+    "This feature is not yet implemented".warn;
+    // this.runFile(PathName(path +/+ name), "init");
+    // this.getInfo(name, \preview, path: path).interpret.value(this);
+    // { 5.wait;
+    //   this.runFile(PathName(path +/+ name), "stop");
+    //   this.runFile(PathName(path +/+ name), "cleanup");
+    // }.fork;
   }
 
   replaceTitleWithNewName {
