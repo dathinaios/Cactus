@@ -1,0 +1,8 @@
+(
+  name: "Cactus",
+  summary: "A style agnostic framework for creative coding using the SuperCollider audio programming language.",
+  version: "0.1.0",
+  schelp: "Cactus",
+  license: "GPL",
+  copyright: "Dionysis Athinaios"
+)
