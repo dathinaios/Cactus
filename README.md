@@ -1,7 +1,9 @@
 # Cactus <a href="http://fasmatwist.com/opensource"><img src="http://fasmatwist.com/opensource-fasma/fasmatwist-logo.png" alt="CuePlayer" width="130px" height="36px" align="right"></a>
+
 <p align="center">
 <a href="https://user-images.githubusercontent.com/481589/216734181-d501fe99-c67c-45b5-a3a3-0c4437d85e58.jpg"><img src="https://user-images.githubusercontent.com/481589/216734181-d501fe99-c67c-45b5-a3a3-0c4437d85e58.jpg" alt="cactus" width="400" height="400px"></a>
 </p>
+
 A style agnostic framework for creative coding using the SuperCollider audio programming language. At its most basic level it will:
 
 * Create a project file structure with configuration, initialisation and cleanup files.
@@ -11,9 +13,39 @@ A style agnostic framework for creative coding using the SuperCollider audio pro
 
 ## Installation
 
-Download from [GitHub](https://github.com/dathinaios/Cactus/releases/latest), unzip & and place the folder in:
+Install it as a quark from within SuperCollider, via:
+
+    Quarks.install("Cactus");
+
+or download it from [GitHub](https://github.com/dathinaios/Cactus/releases/latest), unzip & and place the folder in:
 
     ~/Library/Application Support/SuperCollider/Extensions/
+
+## Quickstart
+
+Run:
+
+```supercollider
+CactusGUI.new;
+```
+
+This will create a project file structure with configuration, initialisation and cleanup files. It will also create a buffers folder from which it collects all sound files and make them available through an intuitive interface.
+
+The `config.scd` is run only once when you first initialize the `Cactus` project. The `.scd` files found in the `init` folder will run after `config.scd` the on initialisation and also every time you call `.restart`. On restart `cleanup.scd` will be called before reinitialisation.
+
+Any `wav` or `aif` file placed in the `buffers` folder will be automagically available as a buffer:
+
+```supercollider
+c = Cactus("/path/to/the/project");
+// for a test.wav file found at the root of the buffers folder
+c.buf("/test");
+// for an asdf.wav file found in the folder moreSounds
+c.buf("/moreSounds/asdf");
+// get a List of all files in the moreSounds folder
+c.buf("/moreSounds")
+```
+
+For more see the Cactus help files.
 
 ---
 ###### <i>Copyright © 2020, Dionysis Athinaios</br>This program is free software; you can redistribute it and/or modify it under the terms of the [GNU General Public License](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).</i>
