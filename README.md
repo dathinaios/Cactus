@@ -9,7 +9,7 @@ A style agnostic framework for creative coding using the SuperCollider audio pro
 * Create a project file structure with configuration, initialisation and cleanup files.
 * Create a `buffers` folder from which it collects all sound files and make them available through an intuitive interface.
 * Allow for defining quickstart templates for different types of projects using a (very) basic templating engine.
-* Allow for the creation and access of modules of sound processes (not available yet).
+* Allow for the creation and access of modules of sound processes (WIP).
 
 ## Installation
 
