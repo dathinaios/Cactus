@@ -31,7 +31,7 @@ CactusGUI.new;
 
 This will create a project file structure with configuration, initialisation and cleanup files. It will also create a buffers folder from which it collects all sound files and make them available through an intuitive interface.
 
-The `config.scd` is run only once when you first initialize the `Cactus` project. The `.scd` files found in the `init` folder will run after `config.scd` the on initialisation and also every time you call `.restart`. On restart `cleanup.scd` will be called before reinitialisation.
+The `config.scd` is run only once when you first initialize the `Cactus` project. The `.scd` files found in the `init` folder will run after `config.scd` on initialisation and also every time you call `.restart`. On restart `cleanup.scd` will be called before reinitialisation.
 
 Any `wav` or `aif` file placed in the `buffers` folder will be automagically available as a buffer:
 
