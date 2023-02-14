@@ -14,7 +14,7 @@ A style agnostic framework for creative coding using the SuperCollider audio pro
 
 
 * Allow for the creation and access of modules of sound processes. The 'modules' and 'browse' keys on the GUI are already present and the structure is functional but there are but a few modules available. The interface may still change quite a bit on this.
-* Add a folder titles 'classes' in your `Cactus` project and the classes will be autolinked `SuperCollider`. Has not been tested but feel free to use and provide feedback.
+* Add a folder titled 'classes' in your `Cactus` project and the classes will be auto-linked to `SuperCollider`. Has not been tested but feel free to use and provide feedback.
 
 ## Installation
 
