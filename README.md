@@ -9,7 +9,12 @@ A style agnostic framework for creative coding using the SuperCollider audio pro
 * Create a project file structure with configuration, initialisation and cleanup files.
 * Create a `buffers` folder from which it collects all sound files and make them available through an intuitive interface.
 * Allow for defining quickstart templates for different types of projects using a (very) basic templating engine.
-* Allow for the creation and access of modules of sound processes (WIP).
+
+#### Work in Progress:
+
+
+* Allow for the creation and access of modules of sound processes. The 'modules' and 'browse' keys on the GUI are already present and the structure is functional but there are but a few modules available. The interface may still change quite a bit on this.
+* Add a folder titles 'classes' in your `Cactus` project and the classes will be autolinked `SuperCollider`. Has not been tested but feel free to use and provide feedback.
 
 ## Installation
 
