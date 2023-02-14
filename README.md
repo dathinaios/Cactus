@@ -1,7 +1,7 @@
 # Cactus <a href="http://fasmatwist.com/opensource"><img src="https://user-images.githubusercontent.com/481589/216767388-d94cdd88-dc8f-4f95-9d87-1275583fb73b.jpg" alt="CuePlayer" width="130px" height="38px" align="right"></a>
 
 <p align="center">
-<a href="https://user-images.githubusercontent.com/481589/218518920-f86b2b44-a200-41bf-9640-50abc013d19e.png"><img src="https://user-images.githubusercontent.com/481589/218518920-f86b2b44-a200-41bf-9640-50abc013d19e.png" alt="cactus" width="400" height="400px"></a>
+<a href="https://user-images.githubusercontent.com/481589/218518920-f86b2b44-a200-41bf-9640-50abc013d19e.png"><img src="https://user-images.githubusercontent.com/481589/218518920-f86b2b44-a200-41bf-9640-50abc013d19e.png" alt="cactus" width="45%" height="45%"></a>
 </p>
 
 A style agnostic framework for creative coding using the SuperCollider audio programming language. At its most basic level it will:
