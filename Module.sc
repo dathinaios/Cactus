@@ -1,10 +1,10 @@
 
-Module { var <modulePath, <name, <arguments, <soundProcess;
+Module { var <modulePath, <name, <arguments, <modules, <soundProcess;
          var <envir;
 
-  *new { arg modulePath, name, arguments;
+  *new { arg modulePath, name, arguments, modules;
     modulePath = modulePath.standardizePath;
-    ^super.newCopyArgs(modulePath, name, arguments).init.run;
+    ^super.newCopyArgs(modulePath, name, arguments, modules).init.run;
   }
 
   init {
@@ -14,6 +14,8 @@ Module { var <modulePath, <name, <arguments, <soundProcess;
   run { var path;
     arguments = arguments.add(\module);
     arguments = arguments.add(this);
+    arguments = arguments.add(\modules);
+    arguments = arguments.add(modules);
     path = PathName(modulePath +/+ name);
     if(File.exists(path.fullPath), {
       soundProcess = this.runFile(path, "run");

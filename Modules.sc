@@ -14,7 +14,7 @@ Modules { var <modulesPath;
     if(options.global == true,
       { path = globalPath },
       { path = modulesPath });
-    ^Module(path, name, arguments);
+    ^Module(path, name, arguments, this);
   }
 
   getInfo { arg name, key, path = globalPath; var yamlDictionary;
@@ -73,7 +73,7 @@ Modules { var <modulesPath;
   runFile { arg folder, file; var path;
     path = (folder.fullPath+/+file.asString++".scd");
     if (File.exists(path), {
-      ^path.load.value;
+      ^path.load.value(this);
     });
   }
 
