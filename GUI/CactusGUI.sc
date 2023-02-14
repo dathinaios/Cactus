@@ -115,12 +115,12 @@ CactusGUI {
     projectControls = ProjectControlsCactus(
       window,
       options: (
-        projectNameFont: Font("Lucida Grande", 15),
+        projectNameFont: Font("Lucida Grande", 14),
         projectNameColor: Color.white )
     );
     windowHeight = windowHeight + projectControls.windowHeight;
     projectControls.openButton.action = { cactus.openProjectDir };
-    projectControls.label.string_("Project:" + cactus.projectName.asString);
+    projectControls.label.string_(cactus.projectName.asString);
     projectControls.restartButton.action = { cactus.restart };
     projectControls.buffersButton.action = { cactus.listBuffers };
     projectControls.modulesButton.action = { cactus.browseModules };
